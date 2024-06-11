@@ -15,12 +15,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL2/SDL_render.h>
+#include <stdlib.h>
 
 #include "common.h"
 
-void render(struct SDL *sdl) {
-  SDL_SetRenderDrawColor(sdl->renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-  SDL_RenderClear(sdl->renderer);
-  //
+void render(struct SDL *sdl, struct collorBuffer *collorBuffer) {
+  // SDL_SetRenderDrawColor(sdl->renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+  // SDL_RenderClear(sdl->renderer);
+  renderCollorBuffer(collorBuffer, sdl->renderer, sdl->windowWidth);
+  clearCollorBuffer(collorBuffer, random());
   SDL_RenderPresent(sdl->renderer);
 }

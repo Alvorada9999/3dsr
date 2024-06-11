@@ -14,23 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common.h"
 
-#include "error.h"
-
-void errExit(uint16_t errCode) {
-  char *errors[8];
-
-  errors[1] = "Not enough memory\n";
-
-  errors[2] = "Failed to init video\n";
-  errors[3] = "Failed to create window\n";
-  errors[4] = "Failed to create sdl renderer\n";
-  errors[5] = "Failed to create sdl texture\n";
-  errors[6] = "Failed to update sdl texture\n";
-  errors[7] = "Failed to copy a portion of a sdl texture\n";
-
-  printf("\033[0m\033[H\033[0J\033[3J%s", errors[errCode]);
-  exit(errCode);
+void clearCollorBuffer(struct collorBuffer *collorBuffer, uint32_t argb8888) {
+  for(uint32_t i=0; i<collorBuffer->size; i++) {
+    collorBuffer->buffer[i] = argb8888;
+  }
 }

@@ -14,23 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <SDL2/SDL_render.h>
 
+#include <stdio.h>
+
+#include "common.h"
 #include "error.h"
 
-void errExit(uint16_t errCode) {
-  char *errors[8];
-
-  errors[1] = "Not enough memory\n";
-
-  errors[2] = "Failed to init video\n";
-  errors[3] = "Failed to create window\n";
-  errors[4] = "Failed to create sdl renderer\n";
-  errors[5] = "Failed to create sdl texture\n";
-  errors[6] = "Failed to update sdl texture\n";
-  errors[7] = "Failed to copy a portion of a sdl texture\n";
-
-  printf("\033[0m\033[H\033[0J\033[3J%s", errors[errCode]);
-  exit(errCode);
+void renderCollorBuffer(struct collorBuffer *collorBuffer, SDL_Renderer *sdlRenderer, uint32_t windowWidth) {
+  if(SDL_UpdateTexture(collorBuffer->texture, NULL, collorBuffer->buffer, (int32_t)(sizeof(uint32_t)*windowWidth)) < 0) errExit(6);
+  if(SDL_RenderCopy(sdlRenderer, collorBuffer->texture, NULL, NULL) < 0) errExit(7);
 }

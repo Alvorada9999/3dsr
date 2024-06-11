@@ -1,5 +1,5 @@
-build:
 .PHONY: build
+build:
 	-rm -R build
 	mkdir build
 	find . -type f -name \*.h -exec cp \{\} ./build/ \;

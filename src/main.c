@@ -25,15 +25,16 @@
 
 int32_t main(void) {
   struct SDL *sdl = initSdl();
+  struct collorBuffer *collorBuffer = createCollorBuffer(sdl->renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
 
   bool isRunning = true;
 
   struct timespec time;
   time.tv_sec = 0;
-  time.tv_sec = 16666666;
+  time.tv_nsec = 16666666;
   while(isRunning) {
     getInput();
-    render(sdl);
+    render(sdl, collorBuffer);
     nanosleep(&time, NULL);
   }
 }

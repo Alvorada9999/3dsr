@@ -17,6 +17,7 @@
 #include <errno.h>
 
 #include <SDL2/SDL.h>
+#include <string.h>
 
 #include "common.h"
 #include "error.h"
@@ -28,8 +29,11 @@ struct SDL *initSdl(void) {
 
   struct SDL *sdl = malloc(sizeof (struct SDL));
   if(sdl == NULL && errno == ENOMEM) errExit(1);
+  memset(sdl, 0, sizeof(struct SDL));
+  sdl->windowWidth = WINDOW_WIDTH;
+  sdl->windowHeight = WINDOW_HEIGHT;
 
-  sdl->window = SDL_CreateWindow("3dsr", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
+  sdl->window = SDL_CreateWindow("3dsr", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
   if(!sdl->window) errExit(3);
 
   sdl->renderer = SDL_CreateRenderer(sdl->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
