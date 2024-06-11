@@ -15,14 +15,17 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL2/SDL_render.h>
-#include <stdlib.h>
 
 #include "common.h"
 
 void render(struct SDL *sdl, struct collorBuffer *collorBuffer) {
-  // SDL_SetRenderDrawColor(sdl->renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-  // SDL_RenderClear(sdl->renderer);
-  renderCollorBuffer(collorBuffer, sdl->renderer, sdl->windowWidth);
-  clearCollorBuffer(collorBuffer, random());
+  drawGrid(collorBuffer, 10, 0xFF00B300);
+  drawRectangle(collorBuffer, 0, 0, 1440/2, 900/2, 0xFF520009);
+  drawRectangle(collorBuffer, 720, 0, 1440/2, 900/2, 0xFF527109);
+  drawRectangle(collorBuffer, 0, 450, 1440/2, 900/2, 0xFF7E7163);
+  drawRectangle(collorBuffer, 1440/2, 900/2, 1440/2, 900/2, 0xFF007163);
+  drawPixel(collorBuffer, 15, 15, 0xFF7E7163);
+  renderCollorBuffer(collorBuffer, sdl->renderer);
+  clearCollorBuffer(collorBuffer, 0x00000009);
   SDL_RenderPresent(sdl->renderer);
 }

@@ -25,7 +25,7 @@
 
 int32_t main(void) {
   struct SDL *sdl = initSdl();
-  struct collorBuffer *collorBuffer = createCollorBuffer(sdl->renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
+  struct collorBuffer *collorBuffer = createCollorBuffer(sdl->renderer, sdl->windowWidth, sdl->windowHeight);
 
   bool isRunning = true;
 

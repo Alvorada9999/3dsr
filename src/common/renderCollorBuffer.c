@@ -21,7 +21,7 @@
 #include "common.h"
 #include "error.h"
 
-void renderCollorBuffer(struct collorBuffer *collorBuffer, SDL_Renderer *sdlRenderer, uint32_t windowWidth) {
-  if(SDL_UpdateTexture(collorBuffer->texture, NULL, collorBuffer->buffer, (int32_t)(sizeof(uint32_t)*windowWidth)) < 0) errExit(6);
+void renderCollorBuffer(struct collorBuffer *collorBuffer, SDL_Renderer *sdlRenderer) {
+  if(SDL_UpdateTexture(collorBuffer->texture, NULL, collorBuffer->buffer, (int32_t)(sizeof(uint32_t)*collorBuffer->width)) < 0) errExit(6);
   if(SDL_RenderCopy(sdlRenderer, collorBuffer->texture, NULL, NULL) < 0) errExit(7);
 }

@@ -30,6 +30,8 @@ struct collorBuffer *createCollorBuffer(SDL_Renderer *sdlRenderer, uint32_t wind
   memset(collorBuffer, 0, sizeof(struct collorBuffer));
 
   collorBuffer->size = windowWidth*windowHeight;
+  collorBuffer->width = windowWidth;
+  collorBuffer->height = windowHeight;
 
   collorBuffer->buffer = malloc(sizeof(uint32_t)*(windowWidth*windowHeight));
   if(collorBuffer->buffer == NULL && errno == ENOMEM) errExit(1);

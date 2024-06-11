@@ -14,24 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "common.h"
 
-#include "error.h"
+void drawGrid(struct collorBuffer *collorBuffer, uint16_t dimension, uint32_t argb) {
+  uint32_t currentRow = dimension;
+  while(currentRow < collorBuffer->height) {
+    for(uint16_t i=0; i<collorBuffer->width; i +=10) {
+      collorBuffer->buffer[(collorBuffer->width*currentRow)+i] = argb;
+    }
+    currentRow += 10;
+  }
 
-void errExit(uint16_t errCode) {
-  char *errors[9];
-
-  errors[1] = "Not enough memory\n";
-
-  errors[2] = "Failed to init video\n";
-  errors[3] = "Failed to create window\n";
-  errors[4] = "Failed to create sdl renderer\n";
-  errors[5] = "Failed to create sdl texture\n";
-  errors[6] = "Failed to update sdl texture\n";
-  errors[7] = "Failed to copy a portion of a sdl texture\n";
-  errors[8] = "Failed to get screen size\n";
-
-  printf("\033[0m\033[H\033[0J\033[3J%s", errors[errCode]);
-  exit(errCode);
+  uint32_t currentColumn = dimension;
+  while(currentColumn < collorBuffer->width) {
+    for(uint16_t i=0; i<collorBuffer->height; i += 10) {
+      collorBuffer->buffer[(i*collorBuffer->width)+currentColumn] = argb;
+    }
+    currentColumn += 10;
+  }
 }
