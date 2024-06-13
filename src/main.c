@@ -14,13 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <stdlib.h>
-#include <time.h>
-
 #include <stdbool.h>
 #include <stdint.h>
 
 #include "common.h"
+#include "entity.h"
 #include "input.h"
 
 int32_t main(void) {
@@ -29,12 +27,31 @@ int32_t main(void) {
 
   bool isRunning = true;
 
-  struct timespec time;
-  time.tv_sec = 0;
-  time.tv_nsec = 16666666;
+  //making a cube with 9 by 9 by 9 with lenght 2
+  vector3D cubeOfPoints[9*9*9];
+  uint16_t currentCubeOfPointsPosition = 0;
+  for(float x=-1; x<=1; x += 0.25) {
+    for(float y=-1; y<=1; y += 0.25) {
+      for(float z=-1; z<=1; z += 0.25) {
+        cubeOfPoints[currentCubeOfPointsPosition].x = x;
+        cubeOfPoints[currentCubeOfPointsPosition].y = y;
+        cubeOfPoints[currentCubeOfPointsPosition].z = z;
+        currentCubeOfPointsPosition++;
+      }
+    }
+  }
+
+  struct entity cubeOfVectors;
+  cubeOfVectors.arrayOfVectors = cubeOfPoints;
+  cubeOfVectors.numberOfVectors = currentCubeOfPointsPosition+1;
+
+  float fovFactor = 128;
+  scaleEntity(cubeOfVectors, fovFactor, fovFactor, fovFactor);
+  translateEntity(cubeOfVectors, sdl->windowWidth/2, sdl->windowHeight/2, 0);
   while(isRunning) {
     getInput();
+    drawEntity(collorBuffer, cubeOfVectors);
     render(sdl, collorBuffer);
-    nanosleep(&time, NULL);
+    SDL_Delay(1000/60);
   }
 }

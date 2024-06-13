@@ -15,9 +15,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "common.h"
+#include "entity.h"
 
-void drawPixel(struct collorBuffer *collorBuffer, uint16_t x, uint16_t y, uint32_t argb) {
-  if(x > 0 && x<collorBuffer->width && y > 0 && y<collorBuffer->height) {
-    collorBuffer->buffer[collorBuffer->width*y+x] = argb;
+void drawEntity(struct collorBuffer *collorBuffer, struct entity entity) {
+  for(uint32_t i=0; i<entity.numberOfVectors; i++) {
+    drawPixel(collorBuffer, entity.arrayOfVectors[i].x, entity.arrayOfVectors[i].y, 0xFFFFFF00);
   }
 }

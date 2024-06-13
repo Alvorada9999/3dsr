@@ -14,10 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "common.h"
+#include "entity.h"
+#include "vector.h"
 
-void drawPixel(struct collorBuffer *collorBuffer, uint16_t x, uint16_t y, uint32_t argb) {
-  if(x > 0 && x<collorBuffer->width && y > 0 && y<collorBuffer->height) {
-    collorBuffer->buffer[collorBuffer->width*y+x] = argb;
+void scaleEntity(struct entity entity, float x, float y, float z) {
+  for(uint32_t i=0; i<entity.numberOfVectors; i++) {
+    scale3DVector(&(entity.arrayOfVectors[i]), x, y, z);
   }
 }

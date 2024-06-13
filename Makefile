@@ -13,4 +13,6 @@ debug:
 	gcc -pedantic-errors -Wall -Wextra -Wsign-conversion -Ibuild -std=gnu17 -g3 -o 3dsr -lSDL2 ./src/*.c \
 		./src/common/*.c \
 		./src/utils/error/*.c \
-		./src/input/*.c
+		./src/input/*.c \
+		./src/vector/*.c \
+		./src/entity/*.c

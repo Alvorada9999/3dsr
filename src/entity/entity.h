@@ -14,10 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#ifndef _3DSR_ENTITY
+#define _3DSR_ENTITY
+#include "vector.h"
+#include "stdint.h"
 #include "common.h"
 
-void drawPixel(struct collorBuffer *collorBuffer, uint16_t x, uint16_t y, uint32_t argb) {
-  if(x > 0 && x<collorBuffer->width && y > 0 && y<collorBuffer->height) {
-    collorBuffer->buffer[collorBuffer->width*y+x] = argb;
-  }
-}
+struct entity {
+  vector3D *arrayOfVectors;
+  uint32_t numberOfVectors;
+};
+
+void drawEntity(struct collorBuffer *collorBuffer, struct entity entity);
+void scaleEntity(struct entity entity, float x, float y, float z);
+void translateEntity(struct entity entity, uint32_t x, uint32_t y, uint32_t z);
+
+#endif // !_3DSR_ENTITY

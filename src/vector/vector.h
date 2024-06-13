@@ -14,10 +14,24 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "common.h"
+#ifndef _3DSR_VECTOR
+#define _3DSR_VECTOR
 
-void drawPixel(struct collorBuffer *collorBuffer, uint16_t x, uint16_t y, uint32_t argb) {
-  if(x > 0 && x<collorBuffer->width && y > 0 && y<collorBuffer->height) {
-    collorBuffer->buffer[collorBuffer->width*y+x] = argb;
-  }
-}
+#include "stdint.h"
+
+typedef struct {
+  float x;
+  float y;
+} vector2D;
+
+typedef struct {
+  float x;
+  float y;
+  float z;
+} vector3D;
+
+void scale3DVector(vector3D *vector3D, float x, float y, float z);
+void translate3DVector(vector3D *vector3D, uint32_t x, uint32_t y, uint32_t z);
+
+#endif // !_3DSR_VECTOR
+

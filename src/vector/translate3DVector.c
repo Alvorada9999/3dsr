@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "common.h"
+#include "vector.h"
 
-void drawPixel(struct collorBuffer *collorBuffer, uint16_t x, uint16_t y, uint32_t argb) {
-  if(x > 0 && x<collorBuffer->width && y > 0 && y<collorBuffer->height) {
-    collorBuffer->buffer[collorBuffer->width*y+x] = argb;
-  }
+void translate3DVector(vector3D *vector3D, uint32_t x, uint32_t y, uint32_t z) {
+  vector3D->x +=x;
+  vector3D->y +=y;
+  vector3D->z +=z;
 }
