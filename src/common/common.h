@@ -32,9 +32,9 @@ struct collorBuffer {
   uint16_t width;
   uint16_t height;
 };
+#include "entity.h"
 
 struct SDL *initSdl(void);
-void render(struct SDL *sdl, struct collorBuffer *collorBuffer);
 struct collorBuffer *createCollorBuffer(SDL_Renderer *sdlRenderer, uint32_t windowWidth, uint32_t windowHeight);
 void clearCollorBuffer(struct collorBuffer *collorBuffer, uint32_t argb8888);
 void renderCollorBuffer(struct collorBuffer *collorBuffer, SDL_Renderer *sdlRenderer);
@@ -42,4 +42,5 @@ void drawGrid(struct collorBuffer *collorBuffer, uint16_t dimension, uint32_t ar
 void drawRectangle(struct collorBuffer *collorBuffer, int16_t x, int16_t y, uint16_t width, uint16_t height, uint32_t argb);
 void drawPixel(struct collorBuffer *collorBuffer, int16_t x, int16_t y, uint32_t argb);
 
+void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities);
 #endif // !_3DSR_COMMON

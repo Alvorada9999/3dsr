@@ -15,10 +15,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "entity.h"
-#include "vector.h"
 
-void scaleEntity(struct entity entity, float x, float y, float z) {
+void scaleEntity(struct entity entity, float value) {
   for(uint32_t i=0; i<entity.numberOfVectors; i++) {
-    scale3DVector(&(entity.arrayOfVectors[i]), x, y, z);
+    entity.arrayOfVectors[i].x *= value;
+    entity.arrayOfVectors[i].y *= value;
   }
 }

@@ -56,16 +56,14 @@ int32_t main(void) {
 
   float fovFactor = 800;
   //ir order to better see the entity
-  scaleEntity(cubeOfVectors, fovFactor, fovFactor, 1);
+  scaleEntity(cubeOfVectors, fovFactor);
   //to move entity away from camera
   translateEntity(cubeOfVectors, 0, 0, 5);
   performPerspectiveProjectionOnEntity(cubeOfVectors);
   //translate on the projection to move it's place on the screen
-  translateEntityProjection(cubeOfVectors, 720, 450);
   while(isRunning) {
     getInput();
-    drawEntity(collorBuffer, cubeOfVectors);
-    render(sdl, collorBuffer);
+    render(sdl, collorBuffer, &cubeOfVectors, 1);
     SDL_Delay(1000/60);
   }
 }

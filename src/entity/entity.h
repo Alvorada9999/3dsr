@@ -18,18 +18,17 @@
 #define _3DSR_ENTITY
 #include "vector.h"
 #include "stdint.h"
-#include "common.h"
 
 struct entity {
   struct vector3D *arrayOfVectors;
   struct vector2D *arrayOfVectorsProjections;
   uint32_t numberOfVectors;
 };
+#include "common.h"
 
 void drawEntity(struct collorBuffer *collorBuffer, struct entity entity);
-void scaleEntity(struct entity entity, float x, float y, float z);
+void scaleEntity(struct entity entity, float value);
 void translateEntity(struct entity entity, float x, float y, float z);
-void translateEntityProjection(struct entity entity, float x, float y);
 void performPerspectiveProjectionOnEntity(struct entity entity);
 
 #endif // !_3DSR_ENTITY

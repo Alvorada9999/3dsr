@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "common.h"
 #include "entity.h"
 
 void drawEntity(struct collorBuffer *collorBuffer, struct entity entity) {
   for(uint32_t i=0; i<entity.numberOfVectors; i++) {
-    // drawPixel(collorBuffer, entity.arrayOfVectorsProjections[i].x, entity.arrayOfVectorsProjections[i].y, 0xFFFFFF00);
-    drawRectangle(collorBuffer, entity.arrayOfVectorsProjections[i].x, entity.arrayOfVectorsProjections[i].y, 4, 4, 0xFFFFFF00);
+    // drawPixel(collorBuffer, entity.arrayOfVectorsProjections[i].x+collorBuffer->width/2, entity.arrayOfVectorsProjections[i].y+collorBuffer->height/2, 0xFFFFFF00);
+    // some addition is being added to the draw position to move the projection to the center of the screen
+    drawRectangle(collorBuffer, entity.arrayOfVectorsProjections[i].x+collorBuffer->width/2, entity.arrayOfVectorsProjections[i].y+collorBuffer->height/2, 4, 4, 0xFFFFFF00);
   }
 }

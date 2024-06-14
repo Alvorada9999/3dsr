@@ -2,5 +2,9 @@
 -Wall
 -Wextra
 -Wsign-conversion
--Ibuild
+-Isrc/common
+-Isrc/entity
+-Isrc/input
+-Isrc/utils/error
+-Isrc/vector
 -std=gnu17

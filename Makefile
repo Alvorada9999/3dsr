@@ -16,3 +16,5 @@ debug:
 		./src/input/*.c \
 		./src/vector/*.c \
 		./src/entity/*.c
+test:
+	make debug && ./3dsr

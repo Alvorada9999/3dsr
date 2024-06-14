@@ -17,9 +17,13 @@
 #include <SDL2/SDL_render.h>
 
 #include "common.h"
+#include "entity.h"
 
-void render(struct SDL *sdl, struct collorBuffer *collorBuffer) {
+void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities) {
   drawGrid(collorBuffer, 10, 0xFF00B300);
+  for(uint32_t i=0; i<numberOfEntities; i++) {
+    drawEntity(collorBuffer, entities[i]);
+  }
   renderCollorBuffer(collorBuffer, sdl->renderer);
   clearCollorBuffer(collorBuffer, 0x00000009);
   SDL_RenderPresent(sdl->renderer);
