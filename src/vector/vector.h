@@ -19,19 +19,21 @@
 
 #include "stdint.h"
 
-typedef struct {
+struct vector2D {
   float x;
   float y;
-} vector2D;
+};
 
-typedef struct {
+struct vector3D {
   float x;
   float y;
   float z;
-} vector3D;
+};
 
-void scale3DVector(vector3D *vector3D, float x, float y, float z);
-void translate3DVector(vector3D *vector3D, uint32_t x, uint32_t y, uint32_t z);
+void scale3DVector(struct vector3D *vector3D, float x, float y, float z);
+void translate3DVector(struct vector3D *vector3D, float x, float y, float z);
+void translate2DVector(struct vector2D *vector3D, float x, float y);
+void performPerspectiveProjectionOnVector(struct vector3D *vector3D, struct vector2D *vector2D);
 
 #endif // !_3DSR_VECTOR
 

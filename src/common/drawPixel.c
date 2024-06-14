@@ -16,8 +16,8 @@
 
 #include "common.h"
 
-void drawPixel(struct collorBuffer *collorBuffer, uint16_t x, uint16_t y, uint32_t argb) {
-  if(x > 0 && x<collorBuffer->width && y > 0 && y<collorBuffer->height) {
+void drawPixel(struct collorBuffer *collorBuffer, int16_t x, int16_t y, uint32_t argb) {
+  if(x >= 0 && x<collorBuffer->width && y>=0 && y<collorBuffer->height) {
     collorBuffer->buffer[collorBuffer->width*y+x] = argb;
   }
 }

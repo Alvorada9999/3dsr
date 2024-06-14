@@ -19,6 +19,7 @@
 
 void drawEntity(struct collorBuffer *collorBuffer, struct entity entity) {
   for(uint32_t i=0; i<entity.numberOfVectors; i++) {
-    drawPixel(collorBuffer, entity.arrayOfVectors[i].x, entity.arrayOfVectors[i].y, 0xFFFFFF00);
+    // drawPixel(collorBuffer, entity.arrayOfVectorsProjections[i].x, entity.arrayOfVectorsProjections[i].y, 0xFFFFFF00);
+    drawRectangle(collorBuffer, entity.arrayOfVectorsProjections[i].x, entity.arrayOfVectorsProjections[i].y, 4, 4, 0xFFFFFF00);
   }
 }

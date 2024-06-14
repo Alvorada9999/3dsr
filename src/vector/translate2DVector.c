@@ -16,8 +16,7 @@
 
 #include "vector.h"
 
-void translate3DVector(struct vector3D *vector3D, float x, float y, float z) {
-  vector3D->x +=x;
-  vector3D->y +=y;
-  vector3D->z +=z;
+void translate2DVector(struct vector2D *vector2D, float x, float y) {
+  vector2D->x +=x;
+  vector2D->y +=y;
 }

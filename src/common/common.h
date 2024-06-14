@@ -39,7 +39,7 @@ struct collorBuffer *createCollorBuffer(SDL_Renderer *sdlRenderer, uint32_t wind
 void clearCollorBuffer(struct collorBuffer *collorBuffer, uint32_t argb8888);
 void renderCollorBuffer(struct collorBuffer *collorBuffer, SDL_Renderer *sdlRenderer);
 void drawGrid(struct collorBuffer *collorBuffer, uint16_t dimension, uint32_t argb);
-void drawRectangle(struct collorBuffer *collorBuffer, uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t argb);
-void drawPixel(struct collorBuffer *collorBuffer, uint16_t x, uint16_t y, uint32_t argb);
+void drawRectangle(struct collorBuffer *collorBuffer, int16_t x, int16_t y, uint16_t width, uint16_t height, uint32_t argb);
+void drawPixel(struct collorBuffer *collorBuffer, int16_t x, int16_t y, uint32_t argb);
 
 #endif // !_3DSR_COMMON

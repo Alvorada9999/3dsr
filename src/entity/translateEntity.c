@@ -17,7 +17,7 @@
 #include "entity.h"
 #include "vector.h"
 
-void translateEntity(struct entity entity, uint32_t x, uint32_t y, uint32_t z) {
+void translateEntity(struct entity entity, float x, float y, float z) {
   for(uint32_t i=0; i<entity.numberOfVectors; i++) {
     translate3DVector(&(entity.arrayOfVectors[i]), x, y, z);
   }

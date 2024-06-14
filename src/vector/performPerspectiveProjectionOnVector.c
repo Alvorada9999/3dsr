@@ -16,8 +16,7 @@
 
 #include "vector.h"
 
-void translate3DVector(struct vector3D *vector3D, float x, float y, float z) {
-  vector3D->x +=x;
-  vector3D->y +=y;
-  vector3D->z +=z;
+void performPerspectiveProjectionOnVector(struct vector3D *vector3D, struct vector2D *vector2D) {
+  vector2D->x = vector3D->x/vector3D->z;
+  vector2D->y = vector3D->y/vector3D->z;
 }

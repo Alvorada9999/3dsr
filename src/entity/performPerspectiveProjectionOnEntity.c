@@ -14,10 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "entity.h"
 #include "vector.h"
 
-void translate3DVector(struct vector3D *vector3D, float x, float y, float z) {
-  vector3D->x +=x;
-  vector3D->y +=y;
-  vector3D->z +=z;
+void performPerspectiveProjectionOnEntity(struct entity entity) {
+  for(uint32_t i=0; i<entity.numberOfVectors; i++) {
+    performPerspectiveProjectionOnVector(entity.arrayOfVectors+i, entity.arrayOfVectorsProjections+i);
+  }
 }

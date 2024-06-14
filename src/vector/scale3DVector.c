@@ -16,7 +16,7 @@
 
 #include "vector.h"
 
-void scale3DVector(vector3D *vector3D, float x, float y, float z) {
+void scale3DVector(struct vector3D *vector3D, float x, float y, float z) {
   vector3D->x *=x;
   vector3D->y *=y;
   vector3D->z *=z;
