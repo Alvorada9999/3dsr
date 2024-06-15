@@ -15,9 +15,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "vector.h"
+#include <math.h>
 
-void scale3DVector(struct vector3D *vector3D, float value) {
-  vector3D->x *=value;
-  vector3D->y *=value;
-  vector3D->z *=value;
+void rotateZVector3D(struct vector3D *vector3D, float beta) {
+  static float holder;
+  holder = vector3D->y = vector3D->y;
+  vector3D->y = vector3D->y*cos(beta) + vector3D->z*sin(beta);
+  vector3D->z = vector3D->z*cos(beta) - holder*sin(beta);
+  // vector3D->x = vector3D->x * cos(beta) - vector3D->y * sin(beta);
+  // vector3D->y = vector3D->x * sin(beta) + vector3D->y * cos(beta);
 }

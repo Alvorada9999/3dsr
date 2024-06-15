@@ -17,8 +17,9 @@
 #include "entity.h"
 #include "vector.h"
 
-void performPerspectiveProjectionOnEntity(struct entity entity) {
+void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor, float howFarToProjectFromCamera) {
   for(uint32_t i=0; i<entity.numberOfVectors; i++) {
-    performPerspectiveProjectionOnVector(entity.arrayOfVectors+i, entity.arrayOfVectorsProjections+i);
+    entity.arrayOfVectorsProjections[i].x = (entity.arrayOfVectors[i].x*fovFactor)/(entity.arrayOfVectors[i].z+howFarToProjectFromCamera);
+    entity.arrayOfVectorsProjections[i].y = (entity.arrayOfVectors[i].y*fovFactor)/(entity.arrayOfVectors[i].z+howFarToProjectFromCamera);
   }
 }

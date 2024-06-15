@@ -23,6 +23,7 @@
 #include "entity.h"
 #include "input.h"
 #include "error.h"
+#include "vector.h"
 
 int32_t main(void) {
   struct SDL *sdl = initSdl();
@@ -31,7 +32,7 @@ int32_t main(void) {
   bool isRunning = true;
 
   //===============================================================================
-  //making a cube with 9 by 9 by 9 with lenght 2
+  //making a cube with 9 by 9 by 9 vectors of lenght 2
   struct vector3D *cubeOfPoints = malloc(sizeof(struct vector3D)*9*9*9);
   if(cubeOfPoints == NULL && errno == ENOMEM) errExit(1);
   struct vector2D *projections = malloc(sizeof(struct vector2D)*9*9*9);
@@ -53,15 +54,16 @@ int32_t main(void) {
   cubeOfVectors.numberOfVectors = currentCubeOfPointsPosition;
   //===============================================================================
 
-
   float fovFactor = 800;
-  //ir order to better see the entity
-  scaleEntity(cubeOfVectors, fovFactor);
-  //to move entity away from camera
-  translateEntity(cubeOfVectors, 0, 0, 5);
-  performPerspectiveProjectionOnEntity(cubeOfVectors);
-  //translate on the projection to move it's place on the screen
+  struct vector3D rotationVector = { 0.05, 0.05, 0.05 };
+  struct vector3D cameraPosition = { 0, 0, -5 };
   while(isRunning) {
+    for(uint32_t i=0; i<cubeOfVectors.numberOfVectors; i++) {
+      rotateXVector3D(&cubeOfVectors.arrayOfVectors[i], rotationVector.x);
+      rotateYVector3D(&cubeOfVectors.arrayOfVectors[i], rotationVector.y);
+      rotateZVector3D(&cubeOfVectors.arrayOfVectors[i], rotationVector.z);
+    }
+    performPerspectiveProjectionOnEntity(cubeOfVectors, fovFactor, cameraPosition.z);
     getInput();
     render(sdl, collorBuffer, &cubeOfVectors, 1);
     SDL_Delay(1000/60);

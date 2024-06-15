@@ -14,11 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "entity.h"
+#include "vector.h"
+#include <math.h>
 
-void scaleEntity(struct entity entity, float value) {
-  for(uint32_t i=0; i<entity.numberOfVectors; i++) {
-    entity.arrayOfVectors[i].x *= value;
-    entity.arrayOfVectors[i].y *= value;
-  }
+void rotateXVector3D(struct vector3D *vector3D, float beta) {
+  static float holder;
+  holder = vector3D->y = vector3D->y;
+  vector3D->y = vector3D->y*cos(beta) + vector3D->z*sin(beta);
+  vector3D->z = vector3D->z*cos(beta) - holder*sin(beta);
+  // vector3D->y = vector3D->y * cos(beta) - vector3D->z * sin(beta);
+  // vector3D->z = vector3D->y * sin(beta) + vector3D->z * cos(beta);
 }

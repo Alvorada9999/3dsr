@@ -30,10 +30,11 @@ struct vector3D {
   float z;
 };
 
-void scale3DVector(struct vector3D *vector3D, float value);
 void translate3DVector(struct vector3D *vector3D, float x, float y, float z);
-void translate2DVector(struct vector2D *vector3D, float x, float y);
-void performPerspectiveProjectionOnVector(struct vector3D *vector3D, struct vector2D *vector2D);
+
+void rotateXVector3D(struct vector3D *vector3D, float beta);
+void rotateYVector3D(struct vector3D *vector3D, float beta);
+void rotateZVector3D(struct vector3D *vector3D, float beta);
 
 #endif // !_3DSR_VECTOR
 

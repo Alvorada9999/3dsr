@@ -20,6 +20,6 @@ void drawEntity(struct collorBuffer *collorBuffer, struct entity entity) {
   for(uint32_t i=0; i<entity.numberOfVectors; i++) {
     // drawPixel(collorBuffer, entity.arrayOfVectorsProjections[i].x+collorBuffer->width/2, entity.arrayOfVectorsProjections[i].y+collorBuffer->height/2, 0xFFFFFF00);
     // some addition is being added to the draw position to move the projection to the center of the screen
-    drawRectangle(collorBuffer, entity.arrayOfVectorsProjections[i].x+collorBuffer->width/2, entity.arrayOfVectorsProjections[i].y+collorBuffer->height/2, 4, 4, 0xFFFFFF00);
+    drawRectangle(collorBuffer, entity.arrayOfVectorsProjections[i].x+1440.0/2, entity.arrayOfVectorsProjections[i].y+900.0/2, 4, 4, 0xFFFC0FC0);
   }
 }

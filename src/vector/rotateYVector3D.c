@@ -15,8 +15,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "vector.h"
+#include <math.h>
 
-void translate2DVector(struct vector2D *vector2D, float x, float y) {
-  vector2D->x +=x;
-  vector2D->y +=y;
+void rotateYVector3D(struct vector3D *vector3D, float beta) {
+  static float holder;
+  holder = vector3D->x = vector3D->x;
+  vector3D->x = vector3D->x*cos(beta) - vector3D->z*sin(beta);
+  vector3D->z = holder*sin(beta) + vector3D->z*cos(beta);
+  // vector3D->x = vector3D->x * cos(beta) - vector3D->z * sin(beta);
+  // vector3D->z = vector3D->x * sin(beta) + vector3D->z * cos(beta);
 }

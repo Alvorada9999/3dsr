@@ -27,8 +27,7 @@ struct entity {
 #include "common.h"
 
 void drawEntity(struct collorBuffer *collorBuffer, struct entity entity);
-void scaleEntity(struct entity entity, float value);
 void translateEntity(struct entity entity, float x, float y, float z);
-void performPerspectiveProjectionOnEntity(struct entity entity);
+void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor, float howFarToProjectFromCamera);
 
 #endif // !_3DSR_ENTITY
