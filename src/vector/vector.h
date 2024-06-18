@@ -30,8 +30,6 @@ struct vector3D {
   float z;
 };
 
-void translate3DVector(struct vector3D *vector3D, float x, float y, float z);
-
 void rotateXVector3D(struct vector3D *vector3D, float beta);
 void rotateYVector3D(struct vector3D *vector3D, float beta);
 void rotateZVector3D(struct vector3D *vector3D, float beta);

@@ -41,6 +41,7 @@ void renderCollorBuffer(struct collorBuffer *collorBuffer, SDL_Renderer *sdlRend
 void drawGrid(struct collorBuffer *collorBuffer, uint16_t dimension, uint32_t argb);
 void drawRectangle(struct collorBuffer *collorBuffer, int16_t x, int16_t y, uint16_t width, uint16_t height, uint32_t argb);
 void drawPixel(struct collorBuffer *collorBuffer, int16_t x, int16_t y, uint32_t argb);
+void drawLineDDA(struct collorBuffer *collorBuffer, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint32_t argb);
 
 void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities);
 #endif // !_3DSR_COMMON

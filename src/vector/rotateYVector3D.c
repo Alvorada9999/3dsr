@@ -19,9 +19,7 @@
 
 void rotateYVector3D(struct vector3D *vector3D, float beta) {
   static float holder;
-  holder = vector3D->x = vector3D->x;
+  holder = vector3D->x;
   vector3D->x = vector3D->x*cos(beta) - vector3D->z*sin(beta);
   vector3D->z = holder*sin(beta) + vector3D->z*cos(beta);
-  // vector3D->x = vector3D->x * cos(beta) - vector3D->z * sin(beta);
-  // vector3D->z = vector3D->x * sin(beta) + vector3D->z * cos(beta);
 }

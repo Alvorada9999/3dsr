@@ -19,15 +19,20 @@
 #include "vector.h"
 #include "stdint.h"
 
+struct triangle {
+  uint32_t a;
+  uint32_t b;
+  uint32_t c;
+};
+
 struct entity {
   struct vector3D *arrayOfVectors;
-  struct vector2D *arrayOfVectorsProjections;
   uint32_t numberOfVectors;
+  struct triangle *triangles;
+  uint32_t numberOfTriangles;
 };
 #include "common.h"
 
-void drawEntity(struct collorBuffer *collorBuffer, struct entity entity);
-void translateEntity(struct entity entity, float x, float y, float z);
-void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor, float howFarToProjectFromCamera);
+void performPerspectiveProjectionOnEntity(struct collorBuffer *collorBuffer, struct entity entity, float fovFactor, float howFarToProjectFromCamera);
 
 #endif // !_3DSR_ENTITY

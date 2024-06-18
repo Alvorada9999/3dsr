@@ -19,10 +19,13 @@
 #include "common.h"
 #include "entity.h"
 
+float fovFactor = 800;
+struct vector3D cameraPosition = { 0, 0, -5 };
+
 void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities) {
   drawGrid(collorBuffer, 10, 0xFF00B300);
   for(uint32_t i=0; i<numberOfEntities; i++) {
-    drawEntity(collorBuffer, entities[i]);
+    performPerspectiveProjectionOnEntity(collorBuffer, entities[i], fovFactor, cameraPosition.z);
   }
   renderCollorBuffer(collorBuffer, sdl->renderer);
   clearCollorBuffer(collorBuffer, 0x00000009);

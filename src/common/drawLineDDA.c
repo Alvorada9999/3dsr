@@ -14,10 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "vector.h"
+#include "common.h"
+#include "math.h"
 
-void translate3DVector(struct vector3D *vector3D, float x, float y, float z) {
-  vector3D->x +=x;
-  vector3D->y +=y;
-  vector3D->z +=z;
+void drawLineDDA(struct collorBuffer *collorBuffer, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint32_t argb) {
+  int32_t deltaX = x2-x1, deltaY = y2-y1;
+  int32_t biggestSideLenght = abs(deltaX) >= abs(deltaY) ? abs(deltaX) : abs(deltaY);
+
+  float xIncrement = deltaX/(float)biggestSideLenght;
+  float yIncrement = deltaY/(float)biggestSideLenght;
+
+  float currentX = x1, currentY = y1;
+
+  for(int32_t i=0; i<=biggestSideLenght; i++) {
+    drawPixel(collorBuffer, round(currentX), round(currentY), argb);
+    currentX += xIncrement;
+    currentY += yIncrement;
+  }
 }
