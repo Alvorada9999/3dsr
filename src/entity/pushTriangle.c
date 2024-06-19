@@ -14,22 +14,24 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <SDL2/SDL_render.h>
+#include <stdlib.h>
+#include <errno.h>
 
-#include "common.h"
 #include "entity.h"
+#include "error.h"
 
-//those values are just for testing purposes
-#define CAMERA_POSITION_Z_AXIS -170
-float fovFactor = 800;
-struct vector3D translation = { .x = 0, .y = -55, .z = CAMERA_POSITION_Z_AXIS };
-
-void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities) {
-  drawGrid(collorBuffer, 10, 0xFF00B300);
-  for(uint32_t i=0; i<numberOfEntities; i++) {
-    performPerspectiveProjectionOnEntity(collorBuffer, entities[i], fovFactor, translation);
+void pushTriangle(struct entity *entity, struct triangle triangle) {
+  if(entity->triangles == NULL) {
+    entity->triangles = malloc(sizeof(struct triangle));
+    if(entity->triangles == NULL && errno == ENOMEM) errExit(1);
+    entity->trianglesLength = 1;
+    entity->trianglesSize = 1;
+    entity->triangles[0] = triangle;
+  } else {
+    entity->triangles = realloc(entity->triangles, sizeof(struct triangle)+entity->trianglesLength*sizeof(struct triangle));
+    if(entity->triangles == NULL && errno == ENOMEM) errExit(1);
+    entity->trianglesLength++;
+    entity->trianglesSize++;
+    entity->triangles[entity->trianglesLength-1] = triangle;
   }
-  renderCollorBuffer(collorBuffer, sdl->renderer);
-  clearCollorBuffer(collorBuffer, 0x00000009);
-  SDL_RenderPresent(sdl->renderer);
 }

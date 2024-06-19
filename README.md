@@ -1,10 +1,12 @@
 #### 🚧 Work in progress 🚧
-# A 3D Software Renderer
+# A 3D [Software Renderer](https://en.wikipedia.org/wiki/Software_rendering)
+<img src='./preview.gif'>
 
-A [Software Renderer](https://en.wikipedia.org/wiki/Software_rendering)
+###### Rendered and recorded on a Thinkpad T400 (2 core no hyperthreading cpu)
+
 ### Dependencies
 
-- [SDL2](http://libsdl.org)
+- [SDL2](http://libsdl.org) to make a [raster](https://en.wikipedia.org/wiki/Raster_graphics)
 - gcc
 - make
 

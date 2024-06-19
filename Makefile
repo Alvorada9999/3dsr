@@ -15,6 +15,7 @@ debug:
 		./src/utils/error/*.c \
 		./src/input/*.c \
 		./src/vector/*.c \
-		./src/entity/*.c
+		./src/entity/*.c \
+		./src/init/*.c
 test:
 	make debug && ./3dsr

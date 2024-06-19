@@ -1,7 +1,7 @@
 // This file is part of 3dsr.
 // Copyright (C) 2024 Kenedy Henrique Bueno Silva
 
-// donttrust is free software: you can redistribute it and/or modify
+// 3dsr is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
@@ -20,7 +20,7 @@
 #include "error.h"
 
 void errExit(uint16_t errCode) {
-  char *errors[9];
+  char *errors[10];
 
   errors[1] = "Not enough memory\n";
 
@@ -31,6 +31,7 @@ void errExit(uint16_t errCode) {
   errors[6] = "Failed to update sdl texture\n";
   errors[7] = "Failed to copy a portion of a sdl texture\n";
   errors[8] = "Failed to get screen size\n";
+  errors[9] = "Failed to open obj file\n";
 
   printf("\033[0m\033[H\033[0J\033[3J%s", errors[errCode]);
   exit(errCode);

@@ -14,10 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "common.h"
+#ifndef _3DSR_INIT
+#define _3DSR_INIT
 
-void clearCollorBuffer(struct collorBuffer *collorBuffer, uint32_t argb8888) {
-  for(uint32_t i=0; i<collorBuffer->size; i++) {
-    collorBuffer->buffer[i] = argb8888;
-  }
-}
+#include <stdint.h>
+
+struct programOptions {
+  char *objFilePath;
+};
+
+struct programOptions getProgramOptions(int32_t argc, char *argv[]);
+
+#endif // !_3DSR_INIT

@@ -7,6 +7,7 @@
 -Isrc/input
 -Isrc/utils/error
 -Isrc/vector
+-Isrc/init
 -lSDL2
 -lm
 -std=gnu17
