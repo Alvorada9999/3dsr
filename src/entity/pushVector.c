@@ -25,13 +25,11 @@ void pushVector(struct entity *entity, struct vector3D vector3D) {
     entity->vectors = malloc(sizeof(struct vector3D));
     if(entity->vectors == NULL && errno == ENOMEM) errExit(1);
     entity->vectorsLength = 1;
-    entity->vectorsSize = 1;
     entity->vectors[0] = vector3D;
   } else {
     entity->vectors = realloc(entity->vectors, sizeof(struct vector3D)+entity->vectorsLength*sizeof(struct vector3D));
     if(entity->vectors == NULL && errno == ENOMEM) errExit(1);
     entity->vectorsLength++;
-    entity->vectorsSize++;
     entity->vectors[entity->vectorsLength-1] = vector3D;
   }
 }

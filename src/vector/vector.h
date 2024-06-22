@@ -34,5 +34,10 @@ void rotateXVector3D(struct vector3D *vector3D, float beta);
 void rotateYVector3D(struct vector3D *vector3D, float beta);
 void rotateZVector3D(struct vector3D *vector3D, float beta);
 
+struct vector3D getCrossProduct(struct vector3D a, struct vector3D b);
+float getDotProduct(struct vector3D a, struct vector3D b);
+
+struct vector3D subtract3DVectors(struct vector3D a, struct vector3D b);
+
 #endif // !_3DSR_VECTOR
 

@@ -28,16 +28,18 @@ struct triangle {
 struct entity {
   struct vector3D *vectors;
   uint32_t vectorsLength;
-  uint32_t vectorsSize;
   struct triangle *triangles;
   uint32_t trianglesLength;
-  uint32_t trianglesSize;
+  float currentXTranslation;
+  float currentYTranslation;
+  float currentZTranslation;
 };
 #include "common.h"
 
-void performPerspectiveProjectionOnEntity(struct collorBuffer *collorBuffer, struct entity entity, float fovFactor, struct vector3D translation);
+void performPerspectiveProjectionOnEntity(struct collorBuffer *collorBuffer, struct entity entity, float fovFactor);
 void loadEntityFromObjFile(char *filePath, struct entity *entity);
 void pushVector(struct entity *entity, struct vector3D vector3D);
 void pushTriangle(struct entity *entity, struct triangle triangle);
+void translateEntity(struct entity *entity, struct vector3D translation);
 
 #endif // !_3DSR_ENTITY

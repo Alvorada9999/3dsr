@@ -15,10 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <fcntl.h>
-#include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
-#include <stdbool.h>
 
 #include "entity.h"
 #include "error.h"
@@ -76,8 +73,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
             case 'z':
               if((buffer[i] < 48 || buffer[i] > 57) && (buffer[i] != '-' && buffer[i] != '.')) {
                 vertex.z = strtof((char *)currentAxisValue, NULL);
-                //obj files use right-hand coordinate system
-                vertex.z = -vertex.z;
+                vertex.z = vertex.z;
                 currentVertexToGet = 'x';
                 currentAxisLenght = 0;
                 memset(currentAxisValue, 0, 10);

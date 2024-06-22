@@ -19,15 +19,13 @@
 #include "common.h"
 #include "entity.h"
 
-//those values are just for testing purposes
-#define CAMERA_POSITION_Z_AXIS -170
+//this value is just for testing purposes
 float fovFactor = 800;
-struct vector3D translation = { .x = 0, .y = -55, .z = CAMERA_POSITION_Z_AXIS };
 
 void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities) {
   drawGrid(collorBuffer, 10, 0xFF00B300);
   for(uint32_t i=0; i<numberOfEntities; i++) {
-    performPerspectiveProjectionOnEntity(collorBuffer, entities[i], fovFactor, translation);
+    performPerspectiveProjectionOnEntity(collorBuffer, entities[i], fovFactor);
   }
   renderCollorBuffer(collorBuffer, sdl->renderer);
   clearCollorBuffer(collorBuffer, 0x00000009);

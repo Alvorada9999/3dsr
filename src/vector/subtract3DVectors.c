@@ -14,22 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <stdlib.h>
-#include <errno.h>
+#include "vector.h"
 
-#include "entity.h"
-#include "error.h"
-
-void pushTriangle(struct entity *entity, struct triangle triangle) {
-  if(entity->triangles == NULL) {
-    entity->triangles = malloc(sizeof(struct triangle));
-    if(entity->triangles == NULL && errno == ENOMEM) errExit(1);
-    entity->trianglesLength = 1;
-    entity->triangles[0] = triangle;
-  } else {
-    entity->triangles = realloc(entity->triangles, sizeof(struct triangle)+entity->trianglesLength*sizeof(struct triangle));
-    if(entity->triangles == NULL && errno == ENOMEM) errExit(1);
-    entity->trianglesLength++;
-    entity->triangles[entity->trianglesLength-1] = triangle;
-  }
+struct vector3D subtract3DVectors(struct vector3D a, struct vector3D b) {
+  return (struct vector3D) {
+    .x = a.x - b.x,
+    .y = a.y - b.y,
+    .z = a.z - b.z
+  };
 }

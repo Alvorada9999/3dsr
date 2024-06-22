@@ -18,17 +18,29 @@
 #include "entity.h"
 #include "vector.h"
 
-void performPerspectiveProjectionOnEntity(struct collorBuffer *collorBuffer, struct entity entity, float fovFactor, struct vector3D translation) {
+void performPerspectiveProjectionOnEntity(struct collorBuffer *collorBuffer, struct entity entity, float fovFactor) {
   static struct vector2D projectedVertexA, projectedVertexB, projectedVertexC;
+  static struct vector3D vertexA, vertexB, vertexC;
   for(uint32_t i=0; i<entity.trianglesLength; i++) {
-    projectedVertexA.x = (entity.vectors[entity.triangles[i].a-1].x+translation.x)*fovFactor/(entity.vectors[entity.triangles[i].a-1].z+translation.z);
-    projectedVertexA.y = (entity.vectors[entity.triangles[i].a-1].y+translation.y)*fovFactor/(entity.vectors[entity.triangles[i].a-1].z+translation.z);
+    vertexA = entity.vectors[entity.triangles[i].a-1];
+    vertexB = entity.vectors[entity.triangles[i].b-1];
+    vertexC = entity.vectors[entity.triangles[i].c-1];
 
-    projectedVertexB.x = (entity.vectors[entity.triangles[i].b-1].x+translation.x)*fovFactor/(entity.vectors[entity.triangles[i].b-1].z+translation.z);
-    projectedVertexB.y = (entity.vectors[entity.triangles[i].b-1].y+translation.y)*fovFactor/(entity.vectors[entity.triangles[i].b-1].z+translation.z);
+    if(shouldCull(entity, vertexA, vertexB, vertexC, (struct vector3D){ .x = 0, .y = 0, .z = 0 })) continue;
+    projectedVertexA.x = (vertexA.x+entity.currentXTranslation)/(vertexA.z+entity.currentZTranslation);
+    projectedVertexA.y = (vertexA.y+entity.currentYTranslation)/(vertexA.z+entity.currentZTranslation);
+    projectedVertexA.x *= fovFactor;
+    projectedVertexA.y *= fovFactor;
 
-    projectedVertexC.x = (entity.vectors[entity.triangles[i].c-1].x+translation.x)*fovFactor/(entity.vectors[entity.triangles[i].c-1].z+translation.z);
-    projectedVertexC.y = (entity.vectors[entity.triangles[i].c-1].y+translation.y)*fovFactor/(entity.vectors[entity.triangles[i].c-1].z+translation.z);
+    projectedVertexB.x = (vertexB.x+entity.currentXTranslation)/(vertexB.z+entity.currentZTranslation);
+    projectedVertexB.y = (vertexB.y+entity.currentYTranslation)/(vertexB.z+entity.currentZTranslation);
+    projectedVertexB.x *= fovFactor;
+    projectedVertexB.y *= fovFactor;
+
+    projectedVertexC.x = (vertexC.x+entity.currentXTranslation)/(vertexC.z+entity.currentZTranslation);
+    projectedVertexC.y = (vertexC.y+entity.currentYTranslation)/(vertexC.z+entity.currentZTranslation);
+    projectedVertexC.x *= fovFactor;
+    projectedVertexC.y *= fovFactor;
 
     // some addition is being added to the draw position to move the projection to the center of the screen
     drawPixel(collorBuffer, projectedVertexA.x+collorBuffer->width/2.0, projectedVertexA.y+collorBuffer->height/2.0, 0xFFFC0FC0);

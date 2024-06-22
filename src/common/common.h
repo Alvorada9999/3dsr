@@ -18,6 +18,7 @@
 #define _3DSR_COMMON
 #include <SDL2/SDL.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 struct SDL {
   SDL_Window *window;
@@ -44,4 +45,6 @@ void drawPixel(struct collorBuffer *collorBuffer, int16_t x, int16_t y, uint32_t
 void drawLineDDA(struct collorBuffer *collorBuffer, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint32_t argb);
 
 void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities);
+
+bool shouldCull(struct entity entity, struct vector3D vertexA, struct vector3D vertexB, struct vector3D vertexC, struct vector3D camera);
 #endif // !_3DSR_COMMON

@@ -25,6 +25,11 @@
 #include "vector.h"
 #include "init.h"
 
+//those values are just for testing purposes
+#define CAMERA_POSITION_X_AXIS 0
+#define CAMERA_POSITION_Z_AXIS -140
+#define CAMERA_POSITION_Y_AXIS -40
+
 int32_t main(int32_t argc, char *argv[]) {
   struct SDL *sdl = initSdl();
   struct collorBuffer *collorBuffer = createCollorBuffer(sdl->renderer, sdl->windowWidth, sdl->windowHeight);
@@ -32,10 +37,15 @@ int32_t main(int32_t argc, char *argv[]) {
   bool isRunning = true;
   
   struct entity entity;
+  entity.currentXTranslation = 0;
+  entity.currentYTranslation = 0;
+  entity.currentZTranslation = 0;
   struct programOptions programOptions = getProgramOptions(argc, argv);
   loadEntityFromObjFile(programOptions.objFilePath, &entity);
 
-  struct vector3D rotationVector = { .x = 0.0, .y = 1.5807, .z = 0.0 };
+  translateEntity(&entity, (struct vector3D){ .x = CAMERA_POSITION_X_AXIS, .y = CAMERA_POSITION_Y_AXIS, .z = CAMERA_POSITION_Z_AXIS });
+
+  struct vector3D rotationVector = { .x = 0.0, .y = 1.5, .z = 0.0 };
   uint64_t lastFrameTime = 0;
   float deltaTime = 0;
   while(isRunning) {
