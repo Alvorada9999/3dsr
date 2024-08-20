@@ -25,3 +25,8 @@
 ```bash
 make
 ```
+### Testing
+
+```bash
+make test
+```

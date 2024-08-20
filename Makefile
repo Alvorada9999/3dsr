@@ -19,4 +19,4 @@ debug:
 		./src/entity/*.c \
 		./src/init/*.c
 test:
-	make debug && ./3dsr
+	make && ./3dsr --obj ./assets/final_v01.obj
