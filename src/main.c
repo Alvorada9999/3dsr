@@ -25,6 +25,7 @@
 #include "vector.h"
 #include "init.h"
 
+struct collorBuffer *collorBuffer;
 //those values are just for testing purposes
 #define CAMERA_POSITION_X_AXIS 0
 #define CAMERA_POSITION_Z_AXIS -140
@@ -32,7 +33,7 @@
 
 int32_t main(int32_t argc, char *argv[]) {
   struct SDL *sdl = initSdl();
-  struct collorBuffer *collorBuffer = createCollorBuffer(sdl->renderer, sdl->windowWidth, sdl->windowHeight);
+  collorBuffer = createCollorBuffer(sdl->renderer, sdl->windowWidth, sdl->windowHeight);
 
   bool isRunning = true;
   
@@ -40,6 +41,8 @@ int32_t main(int32_t argc, char *argv[]) {
   entity.currentXTranslation = 0;
   entity.currentYTranslation = 0;
   entity.currentZTranslation = 0;
+  entity.vectorsLength = 0;
+  entity.trianglesLength = 0;
   struct programOptions programOptions = getProgramOptions(argc, argv);
   loadEntityFromObjFile(programOptions.objFilePath, &entity);
 

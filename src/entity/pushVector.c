@@ -21,7 +21,7 @@
 #include "error.h"
 
 void pushVector(struct entity *entity, struct vector3D vector3D) {
-  if(entity->vectors == NULL) {
+  if(entity->vectorsLength == 0) {
     entity->vectors = malloc(sizeof(struct vector3D));
     if(entity->vectors == NULL && errno == ENOMEM) errExit(1);
     entity->vectorsLength = 1;

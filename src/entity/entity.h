@@ -19,6 +19,7 @@
 #include "vector.h"
 #include "stdint.h"
 
+//each value is used to acess an index from an array of vector3D
 struct triangle {
   uint32_t a;
   uint32_t b;
@@ -34,9 +35,7 @@ struct entity {
   float currentYTranslation;
   float currentZTranslation;
 };
-#include "common.h"
-
-void performPerspectiveProjectionOnEntity(struct collorBuffer *collorBuffer, struct entity entity, float fovFactor);
+void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor);
 void loadEntityFromObjFile(char *filePath, struct entity *entity);
 void pushVector(struct entity *entity, struct vector3D vector3D);
 void pushTriangle(struct entity *entity, struct triangle triangle);

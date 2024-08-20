@@ -14,20 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <SDL2/SDL_render.h>
+#include "utils.h"
 
-#include "common.h"
-#include "entity.h"
-
-//this value is just for testing purposes
-float fovFactor = 800;
-
-void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities) {
-  drawGrid(collorBuffer, 10, 0xFF00B300);
-  for(uint32_t i=0; i<numberOfEntities; i++) {
-    performPerspectiveProjectionOnEntity(entities[i], fovFactor);
-  }
-  renderCollorBuffer(collorBuffer, sdl->renderer);
-  clearCollorBuffer(collorBuffer, 0x00000009);
-  SDL_RenderPresent(sdl->renderer);
+void swap(int32_t *a, int32_t *b) {
+  int32_t holder = *a;
+  *a = *b;
+  *b = holder;
 }

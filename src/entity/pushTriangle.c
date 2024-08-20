@@ -21,7 +21,7 @@
 #include "error.h"
 
 void pushTriangle(struct entity *entity, struct triangle triangle) {
-  if(entity->triangles == NULL) {
+  if(entity->trianglesLength == 0) {
     entity->triangles = malloc(sizeof(struct triangle));
     if(entity->triangles == NULL && errno == ENOMEM) errExit(1);
     entity->trianglesLength = 1;

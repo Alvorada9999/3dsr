@@ -20,6 +20,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define TARGET_FPS 15
+#define TARGET_FRAME_TIME 1000/TARGET_FPS
+
 struct SDL {
   SDL_Window *window;
   SDL_Renderer *renderer;
@@ -47,4 +50,8 @@ void drawLineDDA(struct collorBuffer *collorBuffer, int16_t x1, int16_t y1, int1
 void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities);
 
 bool shouldCull(struct entity entity, struct vector3D vertexA, struct vector3D vertexB, struct vector3D vertexC, struct vector3D camera);
+
+void fillTriangle(int32_t x0, int32_t y0, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint32_t argb8888);
+void fillFlatBottom(int32_t topX, int32_t topY, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint32_t argb8888);
+void fillFlatTop(int32_t bottomX, int32_t bottomY, int32_t x1, int32_t y1, int32_t x2, int32_t y2, uint32_t argb8888);
 #endif // !_3DSR_COMMON

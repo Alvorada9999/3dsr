@@ -5,6 +5,7 @@
 -Isrc/common
 -Isrc/entity
 -Isrc/input
+-Isrc/utils
 -Isrc/utils/error
 -Isrc/vector
 -Isrc/init

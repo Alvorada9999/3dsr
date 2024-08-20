@@ -14,12 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include <math.h>
+
 #include "common.h"
 #include "entity.h"
 #include "vector.h"
 
-void performPerspectiveProjectionOnEntity(struct collorBuffer *collorBuffer, struct entity entity, float fovFactor) {
-  static struct vector2D projectedVertexA, projectedVertexB, projectedVertexC;
+extern struct collorBuffer *collorBuffer;
+
+void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor) {
   static struct vector3D vertexA, vertexB, vertexC;
   for(uint32_t i=0; i<entity.trianglesLength; i++) {
     vertexA = entity.vectors[entity.triangles[i].a-1];
@@ -27,27 +30,22 @@ void performPerspectiveProjectionOnEntity(struct collorBuffer *collorBuffer, str
     vertexC = entity.vectors[entity.triangles[i].c-1];
 
     if(shouldCull(entity, vertexA, vertexB, vertexC, (struct vector3D){ .x = 0, .y = 0, .z = 0 })) continue;
-    projectedVertexA.x = (vertexA.x+entity.currentXTranslation)/(vertexA.z+entity.currentZTranslation);
-    projectedVertexA.y = (vertexA.y+entity.currentYTranslation)/(vertexA.z+entity.currentZTranslation);
-    projectedVertexA.x *= fovFactor;
-    projectedVertexA.y *= fovFactor;
+    vertexA.x = round((vertexA.x+entity.currentXTranslation)/(vertexA.z+entity.currentZTranslation) * fovFactor);
+    vertexA.y = round((vertexA.y+entity.currentYTranslation)/(vertexA.z+entity.currentZTranslation) * fovFactor);
 
-    projectedVertexB.x = (vertexB.x+entity.currentXTranslation)/(vertexB.z+entity.currentZTranslation);
-    projectedVertexB.y = (vertexB.y+entity.currentYTranslation)/(vertexB.z+entity.currentZTranslation);
-    projectedVertexB.x *= fovFactor;
-    projectedVertexB.y *= fovFactor;
+    vertexB.x = round((vertexB.x+entity.currentXTranslation)/(vertexB.z+entity.currentZTranslation) * fovFactor);
+    vertexB.y = round((vertexB.y+entity.currentYTranslation)/(vertexB.z+entity.currentZTranslation) * fovFactor);
 
-    projectedVertexC.x = (vertexC.x+entity.currentXTranslation)/(vertexC.z+entity.currentZTranslation);
-    projectedVertexC.y = (vertexC.y+entity.currentYTranslation)/(vertexC.z+entity.currentZTranslation);
-    projectedVertexC.x *= fovFactor;
-    projectedVertexC.y *= fovFactor;
+    vertexC.x = round((vertexC.x+entity.currentXTranslation)/(vertexC.z+entity.currentZTranslation) * fovFactor);
+    vertexC.y = round((vertexC.y+entity.currentYTranslation)/(vertexC.z+entity.currentZTranslation) * fovFactor);
 
     // some addition is being added to the draw position to move the projection to the center of the screen
-    drawPixel(collorBuffer, projectedVertexA.x+collorBuffer->width/2.0, projectedVertexA.y+collorBuffer->height/2.0, 0xFFFC0FC0);
-    drawPixel(collorBuffer, projectedVertexB.x+collorBuffer->width/2.0, projectedVertexB.y+collorBuffer->height/2.0, 0xFFFC0FC0);
-    drawPixel(collorBuffer, projectedVertexC.x+collorBuffer->width/2.0, projectedVertexC.y+collorBuffer->height/2.0, 0xFFFC0FC0);
-    drawLineDDA(collorBuffer, projectedVertexA.x+1440.0/2, projectedVertexA.y+900.0/2, projectedVertexB.x+1440.0/2, projectedVertexB.y+900.0/2, 0xFFFC0FC0);
-    drawLineDDA(collorBuffer, projectedVertexB.x+1440.0/2, projectedVertexB.y+900.0/2, projectedVertexC.x+1440.0/2, projectedVertexC.y+900.0/2, 0xFFFC0FC0);
-    drawLineDDA(collorBuffer, projectedVertexC.x+1440.0/2, projectedVertexC.y+900.0/2, projectedVertexA.x+1440.0/2, projectedVertexA.y+900.0/2, 0xFFFC0FC0);
+    fillTriangle(vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFCFF75);
+    drawPixel(collorBuffer, vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, 0xFFFF75CE);
+    drawPixel(collorBuffer, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, 0xFFFF75CE);
+    drawPixel(collorBuffer, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFF75CE);
+    drawLineDDA(collorBuffer, vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, 0xFFFF75CE);
+    drawLineDDA(collorBuffer, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFF75CE);
+    drawLineDDA(collorBuffer, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, 0xFFFF75CE);
   }
 }

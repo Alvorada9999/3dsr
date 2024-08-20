@@ -16,8 +16,6 @@
 
 #include <SDL2/SDL_render.h>
 
-#include <stdio.h>
-
 #include "common.h"
 #include "error.h"
 
