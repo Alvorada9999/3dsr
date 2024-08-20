@@ -22,15 +22,13 @@
 #include "common.h"
 #include "entity.h"
 #include "input.h"
-#include "vector.h"
 #include "init.h"
 
 struct collorBuffer *collorBuffer;
 //those values are just for testing purposes
 #define CAMERA_POSITION_X_AXIS 0
-#define CAMERA_POSITION_Z_AXIS -140
-#define CAMERA_POSITION_Y_AXIS -40
-
+#define CAMERA_POSITION_Z_AXIS 0 
+#define CAMERA_POSITION_Y_AXIS 0
 int32_t main(int32_t argc, char *argv[]) {
   struct SDL *sdl = initSdl();
   collorBuffer = createCollorBuffer(sdl->renderer, sdl->windowWidth, sdl->windowHeight);
@@ -46,21 +44,29 @@ int32_t main(int32_t argc, char *argv[]) {
   struct programOptions programOptions = getProgramOptions(argc, argv);
   loadEntityFromObjFile(programOptions.objFilePath, &entity);
 
-  translateEntity(&entity, (struct vector3D){ .x = CAMERA_POSITION_X_AXIS, .y = CAMERA_POSITION_Y_AXIS, .z = CAMERA_POSITION_Z_AXIS });
+  translateEntity(&entity, (struct vector3D){ .x = 0, .y = -55, .z = -170 });
 
-  struct vector3D rotationVector = { .x = 0.0, .y = 1.5, .z = 0.0 };
+  struct vector3D rotationVectorSpeedInSeconds = { .x = 0.0, .y = 1.5, .z = 0.0 };
+  //fix delta time, it's not working properly
   uint64_t lastFrameTime = 0;
-  float deltaTime = 0;
+  float deltaTimeInSeconds = 0;
   while(isRunning) {
+    // Wait some time until reaching the target frame time in milliseconds
+    int32_t timeToWait = TARGET_FRAME_TIME - (SDL_GetTicks64() - lastFrameTime);
+    // Only delay execution if we are running too fast
+    if (timeToWait > 0 && timeToWait <= TARGET_FRAME_TIME) {
+      SDL_Delay((uint64_t)timeToWait);
+    }
+    deltaTimeInSeconds = (SDL_GetTicks64() - lastFrameTime)/1000.0f;
+    lastFrameTime = SDL_GetTicks64();
+
     getInput();
-    deltaTime = SDL_GetTicks64() - lastFrameTime;
+
     for(uint32_t i=0; i<entity.vectorsLength; i++) {
-      rotateXVector3D(&entity.vectors[i], rotationVector.x*deltaTime/1000);
-      rotateYVector3D(&entity.vectors[i], rotationVector.y*deltaTime/1000);
-      rotateZVector3D(&entity.vectors[i], rotationVector.z*deltaTime/1000);
+      rotateXVector3D(&entity.vectors[i], rotationVectorSpeedInSeconds.x*deltaTimeInSeconds);
+      rotateYVector3D(&entity.vectors[i], rotationVectorSpeedInSeconds.y*deltaTimeInSeconds);
+      rotateZVector3D(&entity.vectors[i], rotationVectorSpeedInSeconds.z*deltaTimeInSeconds);
     }
     render(sdl, collorBuffer, &entity, 1);
-    lastFrameTime = SDL_GetTicks64();
-    SDL_Delay(1000/60);
   }
 }
