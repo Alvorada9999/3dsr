@@ -47,7 +47,6 @@ int32_t main(int32_t argc, char *argv[]) {
   translateEntity(&entity, (struct vector3D){ .x = 0, .y = -55, .z = -170 });
 
   struct vector3D rotationVectorSpeedInSeconds = { .x = 0.0, .y = 1.5, .z = 0.0 };
-  //fix delta time, it's not working properly
   uint64_t lastFrameTime = 0;
   float deltaTimeInSeconds = 0;
   while(isRunning) {
