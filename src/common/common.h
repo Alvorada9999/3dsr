@@ -20,8 +20,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define TARGET_FPS 15
+#define TARGET_FPS 60
 #define TARGET_FRAME_TIME 1000/TARGET_FPS
+#define RENDER_OPTION_ONLY_VECTORS 1
+#define RENDER_OPTION_ONLY_WIREFRAME 2
+#define RENDER_OPTION_ONLY_FACES 3
+#define RENDER_OPTION_WIREFRAME_AND_FACES 4
 
 struct SDL {
   SDL_Window *window;

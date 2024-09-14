@@ -20,6 +20,8 @@
 #include "entity.h"
 #include "vector.h"
 
+uint8_t renderOption = RENDER_OPTION_WIREFRAME_AND_FACES;
+
 extern struct collorBuffer *collorBuffer;
 
 void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor) {
@@ -39,13 +41,34 @@ void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor)
     vertexC.x = round((vertexC.x+entity.currentXTranslation)/(vertexC.z+entity.currentZTranslation) * fovFactor);
     vertexC.y = round((vertexC.y+entity.currentYTranslation)/(vertexC.z+entity.currentZTranslation) * fovFactor);
 
-    // some addition is being added to the draw position to move the projection to the center of the screen
-    fillTriangle(vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFCFF75);
-    drawPixel(collorBuffer, vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, 0xFFFF75CE);
-    drawPixel(collorBuffer, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, 0xFFFF75CE);
-    drawPixel(collorBuffer, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFF75CE);
-    drawLineDDA(collorBuffer, vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, 0xFFFF75CE);
-    drawLineDDA(collorBuffer, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFF75CE);
-    drawLineDDA(collorBuffer, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, 0xFFFF75CE);
+    // some addition is being added to the draw position to move the projection to the center of the screen /////////////////
+
+    if(renderOption == RENDER_OPTION_ONLY_VECTORS) {
+      drawPixel(collorBuffer, vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, 0xFFFF75CE);
+      drawPixel(collorBuffer, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, 0xFFFF75CE);
+      drawPixel(collorBuffer, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFF75CE);
+      continue;
+    }
+
+    if(renderOption == RENDER_OPTION_ONLY_FACES) {
+      fillTriangle(vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFCFF75);
+      continue;
+    }
+
+    if(renderOption == RENDER_OPTION_ONLY_WIREFRAME) {
+      drawLineDDA(collorBuffer, vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, 0xFFFF75CE);
+      drawLineDDA(collorBuffer, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFF75CE);
+      drawLineDDA(collorBuffer, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, 0xFFFF75CE);
+      continue;
+    }
+
+    if(renderOption == RENDER_OPTION_WIREFRAME_AND_FACES) {
+      fillTriangle(vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFCFF75);
+      drawLineDDA(collorBuffer, vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, 0xFFFF75CE);
+      drawLineDDA(collorBuffer, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFF75CE);
+      drawLineDDA(collorBuffer, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, 0xFFFF75CE);
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   }
 }

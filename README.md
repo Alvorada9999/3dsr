@@ -30,3 +30,10 @@ make
 ```bash
 make test
 ```
+
+### Render options
+Press some of these buttons
+- 1 for rendering only the point of vectors
+- 2 for rendering only the wireframe
+- 3 for rendering only the faces
+- 4 for rendering the wireframe and faces

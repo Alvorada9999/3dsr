@@ -15,6 +15,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL2/SDL_events.h>
+
+#include "common.h"
+
+extern uint8_t renderOption;
 void getInput(void) {
   SDL_Event event;
   SDL_PollEvent(&event);
@@ -22,6 +26,20 @@ void getInput(void) {
   switch (event.type) {
     case SDL_QUIT:
       exit(1);
+      break;
+    case SDL_KEYDOWN:
+      if(event.key.keysym.sym == SDLK_1) {
+        renderOption = RENDER_OPTION_ONLY_VECTORS;
+      }
+      if(event.key.keysym.sym == SDLK_2) {
+        renderOption = RENDER_OPTION_ONLY_WIREFRAME;
+      }
+      if(event.key.keysym.sym == SDLK_3) {
+        renderOption = RENDER_OPTION_ONLY_FACES;
+      }
+      if(event.key.keysym.sym == SDLK_4) {
+        renderOption = RENDER_OPTION_WIREFRAME_AND_FACES;
+      }
       break;
     default:
       break;
