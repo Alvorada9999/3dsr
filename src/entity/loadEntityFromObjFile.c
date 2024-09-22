@@ -92,7 +92,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
           break;
         }
         case PARSING_FACE: {
-          static struct triangle triangle = { 0, 0, 0 };
+          static struct triangle triangle = { 0, 0, 0, 0 };
           static uint8_t currentVertexIndexToGet = 'a';
           static uint8_t faceBuffer[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, faceBufferLength = 0;
           static bool ignoreUntilSpace = false;

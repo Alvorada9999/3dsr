@@ -20,12 +20,84 @@
 #include "entity.h"
 #include "vector.h"
 
+void merge(struct triangle *triangles, uint32_t left, uint32_t mid, uint32_t right) {
+  uint32_t i, j, k;
+  uint32_t n1 = mid - left + 1;
+  uint32_t n2 = right - mid;
+
+  // Create temporary arrays
+  struct triangle leftArr[n1], rightArr[n2];
+
+  // Copy data to temporary arrays
+  for (i = 0; i < n1; i++)
+    leftArr[i] = triangles[left + i];
+  for (j = 0; j < n2; j++)
+    rightArr[j] = triangles[mid + 1 + j];
+
+  // Merge the temporary arrays back into arr[left..right]
+  i = 0;
+  j = 0;
+  k = left;
+  while (i < n1 && j < n2) {
+    if (leftArr[i].deep <= rightArr[j].deep) {
+      triangles[k] = leftArr[i];
+      i++;
+    }
+    else {
+      triangles[k] = rightArr[j];
+      j++;
+    }
+    k++;
+  }
+
+  // Copy the remaining elements of leftArr[], if any
+  while (i < n1) {
+    triangles[k] = leftArr[i];
+    i++;
+    k++;
+  }
+
+  // Copy the remaining elements of rightArr[], if any
+  while (j < n2) {
+    triangles[k] = rightArr[j];
+    j++;
+    k++;
+  }
+}
+
+// The subarray to be sorted is in the index range [left-right]
+void mergeSort(struct triangle *triangles, uint32_t left, uint32_t right) {
+  if (left < right) {
+
+    // Calculate the midpoint
+    uint32_t mid = left + (right - left) / 2;
+
+    // Sort first and second halves
+    mergeSort(triangles, left, mid);
+    mergeSort(triangles, mid + 1, right);
+
+    // Merge the sorted halves
+    merge(triangles, left, mid, right);
+  }
+}
+
+void sortTrianglesByDeep(struct triangle *triangles, uint32_t trianglesLength, struct vector3D *vectors, float currentZTranslation) {
+  for (uint32_t i=0; i<trianglesLength; i++) {
+    triangles[i].deep = ((vectors[triangles[i].a].z+currentZTranslation) + (vectors[triangles[i].b].z+currentZTranslation) + (vectors[triangles[i].c].z+currentZTranslation))/3;
+  }
+  mergeSort(triangles, 0, trianglesLength);
+}
+
 uint8_t renderOption = RENDER_OPTION_WIREFRAME_AND_FACES;
 
 extern struct collorBuffer *collorBuffer;
 
 void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor) {
   static struct vector3D vertexA, vertexB, vertexC;
+
+  //Painter's algorithm usage, at some point in the future the z buffer solution will be used instead
+  sortTrianglesByDeep(entity.triangles, entity.trianglesLength-1, entity.vectors, entity.currentZTranslation);
+
   for(uint32_t i=0; i<entity.trianglesLength; i++) {
     vertexA = entity.vectors[entity.triangles[i].a-1];
     vertexB = entity.vectors[entity.triangles[i].b-1];
