@@ -23,30 +23,29 @@
 #include "entity.h"
 #include "input.h"
 #include "init.h"
+#include "matrices.h"
 
 struct collorBuffer *collorBuffer;
+
 //those values are just for testing purposes
 #define CAMERA_POSITION_X_AXIS 0
 #define CAMERA_POSITION_Z_AXIS 0 
 #define CAMERA_POSITION_Y_AXIS 0
+struct vector3D rotationVectorSpeedInSeconds = { .x = 0.0, .y = 1.5, .z = 0.0 };
+struct vector3D initialPosition = { .x = 0, .y = -55, .z = -170 };
+
 int32_t main(int32_t argc, char *argv[]) {
   struct SDL *sdl = initSdl();
   collorBuffer = createCollorBuffer(sdl->renderer, sdl->windowWidth, sdl->windowHeight);
 
   bool isRunning = true;
   
-  struct entity entity;
-  entity.currentXTranslation = 0;
-  entity.currentYTranslation = 0;
-  entity.currentZTranslation = 0;
-  entity.vectorsLength = 0;
-  entity.trianglesLength = 0;
+  struct entity entity = getNewEntity();
   struct programOptions programOptions = getProgramOptions(argc, argv);
   loadEntityFromObjFile(programOptions.objFilePath, &entity);
 
-  translateEntity(&entity, (struct vector3D){ .x = 0, .y = -55, .z = -170 });
+  translateEntity(&entity, initialPosition);
 
-  struct vector3D rotationVectorSpeedInSeconds = { .x = 0.0, .y = 1.5, .z = 0.0 };
   uint64_t lastFrameTime = 0;
   float deltaTimeInSeconds = 0;
   while(isRunning) {
@@ -61,10 +60,10 @@ int32_t main(int32_t argc, char *argv[]) {
 
     getInput();
 
+    static struct Matrix4x4 rotationMatrix;
+    rotationMatrix = get4x4Rotation(rotationVectorSpeedInSeconds.x*deltaTimeInSeconds, rotationVectorSpeedInSeconds.y*deltaTimeInSeconds, rotationVectorSpeedInSeconds.z*deltaTimeInSeconds);
     for(uint32_t i=0; i<entity.vectorsLength; i++) {
-      rotateXVector3D(&entity.vectors[i], rotationVectorSpeedInSeconds.x*deltaTimeInSeconds);
-      rotateYVector3D(&entity.vectors[i], rotationVectorSpeedInSeconds.y*deltaTimeInSeconds);
-      rotateZVector3D(&entity.vectors[i], rotationVectorSpeedInSeconds.z*deltaTimeInSeconds);
+      entity.vectors[i] = get4x4ByVector3DProduct(&rotationMatrix, &entity.vectors[i]);
     }
     render(sdl, collorBuffer, &entity, 1);
   }

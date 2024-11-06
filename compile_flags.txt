@@ -9,6 +9,7 @@
 -Isrc/utils/error
 -Isrc/vector
 -Isrc/init
+-Isrc/matrices
 -lSDL2
 -lm
 -std=gnu17

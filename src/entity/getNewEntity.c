@@ -14,31 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef _3DSR_VECTOR
-#define _3DSR_VECTOR
+#include "entity.h"
+#include "stddef.h"
 
-#include "stdint.h"
-
-struct vector2D {
-  float x;
-  float y;
-};
-
-struct vector3D {
-  float x;
-  float y;
-  float z;
-  float w;
-};
-
-void rotateXVector3D(struct vector3D *vector3D, float beta);
-void rotateYVector3D(struct vector3D *vector3D, float beta);
-void rotateZVector3D(struct vector3D *vector3D, float beta);
-
-struct vector3D getCrossProduct(struct vector3D a, struct vector3D b);
-float getDotProduct(struct vector3D a, struct vector3D b);
-
-struct vector3D subtract3DVectors(struct vector3D a, struct vector3D b);
-
-#endif // !_3DSR_VECTOR
-
+struct entity getNewEntity(void) {
+  struct entity e;
+  e.vectors = NULL;
+  e.vectorsLength = 0;
+  e.triangles = NULL;
+  e.trianglesLength = 0;
+  e.currentXTranslation = 0;
+  e.currentYTranslation = 0;
+  e.currentZTranslation = 0;
+  return e;
+}

@@ -51,6 +51,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
           static uint8_t currentAxisValue[10]  = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
           static uint8_t currentAxisLenght = 0;
           static struct vector3D vertex;
+          vertex.w = 1.0f;
           switch (currentVertexToGet) {
             case 'x':
               if((buffer[i] < 48 || buffer[i] > 57) && (buffer[i] != '-' && buffer[i] != '.')) {

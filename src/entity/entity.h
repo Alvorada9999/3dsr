@@ -36,6 +36,8 @@ struct entity {
   float currentYTranslation;
   float currentZTranslation;
 };
+
+struct entity getNewEntity(void);
 void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor);
 void loadEntityFromObjFile(char *filePath, struct entity *entity);
 void pushVector(struct entity *entity, struct vector3D vector3D);

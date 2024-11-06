@@ -17,6 +17,7 @@ debug:
 		./src/input/*.c \
 		./src/vector/*.c \
 		./src/entity/*.c \
-		./src/init/*.c
+		./src/init/*.c \
+		./src/matrices/*.c
 test:
 	make && ./3dsr --obj ./assets/final_v01.obj

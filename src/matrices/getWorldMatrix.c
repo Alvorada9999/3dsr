@@ -14,31 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef _3DSR_VECTOR
-#define _3DSR_VECTOR
+#include "matrices.h"
 
-#include "stdint.h"
-
-struct vector2D {
-  float x;
-  float y;
-};
-
-struct vector3D {
-  float x;
-  float y;
-  float z;
-  float w;
-};
-
-void rotateXVector3D(struct vector3D *vector3D, float beta);
-void rotateYVector3D(struct vector3D *vector3D, float beta);
-void rotateZVector3D(struct vector3D *vector3D, float beta);
-
-struct vector3D getCrossProduct(struct vector3D a, struct vector3D b);
-float getDotProduct(struct vector3D a, struct vector3D b);
-
-struct vector3D subtract3DVectors(struct vector3D a, struct vector3D b);
-
-#endif // !_3DSR_VECTOR
-
+struct Matrix4x4 getWorldMatrix(struct Matrix4x4 scaling, struct Matrix4x4 translation, struct Matrix4x4 rotationX, struct Matrix4x4 rotationY, struct Matrix4x4 rotationZ) {
+  struct Matrix4x4 m = get4x4By4x4Product(&rotationX, &scaling);
+  m = get4x4By4x4Product(&rotationY, &m);
+  m = get4x4By4x4Product(&rotationZ, &m);
+  m = get4x4By4x4Product(&translation, &m);
+  return m;
+}
