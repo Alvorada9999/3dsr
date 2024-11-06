@@ -31,12 +31,12 @@ bool shouldCull(struct entity entity, struct vector3D vertexA, struct vector3D v
 
   v1 = subtract3DVectors(vertexB, vertexA);
   v2 = subtract3DVectors(vertexC, vertexA);
-  faceNormal = getCrossProduct(v2, v1);
+  faceNormal = getCrossProduct(v1, v2);
 
   //don't matter wich vertex, I just want a vector coming from the camera to the face
-  cameraRay = subtract3DVectors(vertexA, camera);
+  cameraRay = subtract3DVectors(camera, vertexA);
 
-  if(getDotProduct(faceNormal, cameraRay) < 0) {
+  if(getDotProduct(faceNormal, cameraRay) <= 0) {
     return true;
   } else return false;
 }
