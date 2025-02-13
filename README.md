@@ -31,6 +31,13 @@ make
 make test
 ```
 
+### Assets
+Keep in mind this repository uses [Git LFS](https://git-lfs.com/), you need that to get the assets back, after cloning, run:
+```bash
+cd 3dsr
+git lfs pull
+```
+
 ### Render options
 Press some of these buttons
 - 1 for rendering only the point of vectors
