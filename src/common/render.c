@@ -19,8 +19,7 @@
 #include "common.h"
 #include "entity.h"
 
-//this value is just for testing purposes
-float fovFactor = 800;
+extern float fovFactor;
 
 void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities) {
   drawGrid(collorBuffer, 10, 0xFF00B300);

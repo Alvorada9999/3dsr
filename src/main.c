@@ -32,7 +32,8 @@ struct collorBuffer *collorBuffer;
 #define CAMERA_POSITION_Z_AXIS 0 
 #define CAMERA_POSITION_Y_AXIS 0
 struct vector3D rotationVectorSpeedInSeconds = { .x = 0.0, .y = 1.5, .z = 0.0 };
-struct vector3D initialPosition = { .x = 0, .y = -55, .z = -170 };
+struct vector3D initialPosition = { .x = 0, .y = 0, .z = 0 };
+float fovFactor = 0;
 
 int32_t main(int32_t argc, char *argv[]) {
   struct SDL *sdl = initSdl();

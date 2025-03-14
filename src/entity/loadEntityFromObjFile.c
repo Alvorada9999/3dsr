@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "entity.h"
 #include "error.h"
@@ -29,7 +30,16 @@
 #define PARSING_VERTEX 1
 #define PARSING_FACE 2
 
+extern struct vector3D initialPosition;
+extern float fovFactor;
+
 void loadEntityFromObjFile(char *filePath, struct entity *entity) {
+  //those are used to store information used to decide
+  //the initial position for the entity model
+  float verticalLength = 0, horizontalLength = 0;
+  float biggestPositveX = 0, biggestPositveY = 0, biggestPositveZ = 0;
+  float smallestNegativeX = 0, smallestNegativeY = 0;
+
   uint8_t currentTask = LOOKING_FOR_FACES_AND_VERTICES;
   int8_t fd = open(filePath, O_RDONLY);
   if(fd == -1) errExit(9);
@@ -78,12 +88,18 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
             case 'z':
               if((buffer[i] < 48 || buffer[i] > 57) && (buffer[i] != '-' && buffer[i] != '.')) {
                 vertex.z = strtof((char *)currentAxisValue, NULL);
-                vertex.z = vertex.z;
                 currentVertexToGet = 'x';
                 currentAxisLenght = 0;
                 memset(currentAxisValue, 0, 10);
                 currentTask = LOOKING_FOR_FACES_AND_VERTICES;
                 pushVector(entity, vertex);
+
+                if(vertex.x > biggestPositveX) biggestPositveX = vertex.x;
+                if(vertex.x < smallestNegativeX) smallestNegativeX = vertex.x;
+                if(vertex.y > biggestPositveY) biggestPositveY = vertex.y;
+                if(vertex.y < smallestNegativeY) smallestNegativeY = vertex.y;
+                if(vertex.z > biggestPositveZ) biggestPositveZ = vertex.z;
+
                 break;
               }
               currentAxisValue[currentAxisLenght] = buffer[i];
@@ -148,4 +164,28 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
       lastChar = buffer[i];
     }
   }
+
+  horizontalLength = fabs(smallestNegativeX) + biggestPositveX;
+  verticalLength = fabs(smallestNegativeY) + biggestPositveY;
+  if(fabs(smallestNegativeY) != biggestPositveY) {
+    if(fabs(smallestNegativeY) > biggestPositveY) {
+      initialPosition.y = (verticalLength/2) - biggestPositveY;
+    } else {
+      initialPosition.y = 0 - ((verticalLength/2) - fabs(smallestNegativeY));
+    }
+  }
+  if(fabs(smallestNegativeX) != biggestPositveX) {
+    if(fabs(smallestNegativeX) > biggestPositveX) {
+      initialPosition.x = (horizontalLength/2) - biggestPositveX;
+    } else {
+      initialPosition.x = 0 - ((horizontalLength/2) - fabs(smallestNegativeX));
+    }
+  }
+  float bigger = 0;
+  if(horizontalLength > bigger) bigger = horizontalLength;
+  if(verticalLength > bigger) bigger = verticalLength;
+  if(biggestPositveZ > bigger) bigger = biggestPositveZ;
+  initialPosition.z = 0 - bigger;
+  fovFactor = bigger;
+
 }
