@@ -81,9 +81,9 @@ void mergeSort(struct triangle *triangles, uint32_t left, uint32_t right) {
   }
 }
 
-void sortTrianglesByDeep(struct triangle *triangles, uint32_t trianglesLength, struct vector3D *vectors, float currentZTranslation) {
+void sortTrianglesByDeep(struct triangle *triangles, uint32_t trianglesLength, struct vector3D *vectors) {
   for (uint32_t i=0; i<trianglesLength; i++) {
-    triangles[i].deep = ((vectors[triangles[i].a].z+currentZTranslation) + (vectors[triangles[i].b].z+currentZTranslation) + (vectors[triangles[i].c].z+currentZTranslation))/3;
+    triangles[i].deep = ((vectors[triangles[i].a].z) + (vectors[triangles[i].b].z) + (vectors[triangles[i].c].z))/3;
   }
   mergeSort(triangles, 0, trianglesLength);
 }
@@ -96,22 +96,22 @@ void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor)
   static struct vector3D vertexA, vertexB, vertexC;
 
   //Painter's algorithm usage, at some point in the future the z buffer solution will be used instead
-  sortTrianglesByDeep(entity.triangles, entity.trianglesLength-1, entity.vectors, entity.currentZTranslation);
+  sortTrianglesByDeep(entity.triangles, entity.trianglesLength-1, entity.transformedVectors);
 
   for(uint32_t i=0; i<entity.trianglesLength; i++) {
-    vertexA = entity.vectors[entity.triangles[i].a-1];
-    vertexB = entity.vectors[entity.triangles[i].b-1];
-    vertexC = entity.vectors[entity.triangles[i].c-1];
+    vertexA = entity.transformedVectors[entity.triangles[i].a-1];
+    vertexB = entity.transformedVectors[entity.triangles[i].b-1];
+    vertexC = entity.transformedVectors[entity.triangles[i].c-1];
 
-    if(shouldCull(entity, vertexA, vertexB, vertexC, (struct vector3D){ .x = 0, .y = 0, .z = 0 })) continue;
-    vertexA.x = round((vertexA.x+entity.currentXTranslation)/(vertexA.z+entity.currentZTranslation) * fovFactor);
-    vertexA.y = round((vertexA.y+entity.currentYTranslation)/(vertexA.z+entity.currentZTranslation) * fovFactor);
+    if(shouldCull(vertexA, vertexB, vertexC, (struct vector3D){ .x = 0, .y = 0, .z = 0 })) continue;
+    vertexA.x = round((vertexA.x)/(vertexA.z) * fovFactor);
+    vertexA.y = round((vertexA.y)/(vertexA.z) * fovFactor);
 
-    vertexB.x = round((vertexB.x+entity.currentXTranslation)/(vertexB.z+entity.currentZTranslation) * fovFactor);
-    vertexB.y = round((vertexB.y+entity.currentYTranslation)/(vertexB.z+entity.currentZTranslation) * fovFactor);
+    vertexB.x = round((vertexB.x)/(vertexB.z) * fovFactor);
+    vertexB.y = round((vertexB.y)/(vertexB.z) * fovFactor);
 
-    vertexC.x = round((vertexC.x+entity.currentXTranslation)/(vertexC.z+entity.currentZTranslation) * fovFactor);
-    vertexC.y = round((vertexC.y+entity.currentYTranslation)/(vertexC.z+entity.currentZTranslation) * fovFactor);
+    vertexC.x = round((vertexC.x)/(vertexC.z) * fovFactor);
+    vertexC.y = round((vertexC.y)/(vertexC.z) * fovFactor);
 
     // some addition is being added to the draw position to move the projection to the center of the screen /////////////////
 

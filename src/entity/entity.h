@@ -29,12 +29,10 @@ struct triangle {
 
 struct entity {
   struct vector3D *vectors;
+  struct vector3D *transformedVectors;
   uint32_t vectorsLength;
   struct triangle *triangles;
   uint32_t trianglesLength;
-  float currentXTranslation;
-  float currentYTranslation;
-  float currentZTranslation;
 };
 
 struct entity getNewEntity(void);

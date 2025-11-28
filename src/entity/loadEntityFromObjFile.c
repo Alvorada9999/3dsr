@@ -188,4 +188,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
   initialPosition.z = 0 - bigger;
   fovFactor = bigger;
 
+  entity->transformedVectors = malloc(sizeof(struct vector3D)*entity->vectorsLength);
+  memset(entity->transformedVectors, 0, sizeof(struct vector3D)*entity->vectorsLength);
+
 }

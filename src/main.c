@@ -18,6 +18,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
 
 #include "common.h"
 #include "entity.h"
@@ -45,7 +46,7 @@ int32_t main(int32_t argc, char *argv[]) {
   struct programOptions programOptions = getProgramOptions(argc, argv);
   loadEntityFromObjFile(programOptions.objFilePath, &entity);
 
-  translateEntity(&entity, initialPosition);
+  struct Matrix4x4 translationMatrix = get4x4Translation(initialPosition.x, initialPosition.y, initialPosition.z);
 
   uint64_t lastFrameTime = 0;
   float deltaTimeInSeconds = 0;
@@ -65,6 +66,7 @@ int32_t main(int32_t argc, char *argv[]) {
     rotationMatrix = get4x4Rotation(rotationVectorSpeedInSeconds.x*deltaTimeInSeconds, rotationVectorSpeedInSeconds.y*deltaTimeInSeconds, rotationVectorSpeedInSeconds.z*deltaTimeInSeconds);
     for(uint32_t i=0; i<entity.vectorsLength; i++) {
       entity.vectors[i] = get4x4ByVector3DProduct(&rotationMatrix, &entity.vectors[i]);
+      entity.transformedVectors[i] = get4x4ByVector3DProduct(&translationMatrix, &entity.vectors[i]);
     }
     render(sdl, collorBuffer, &entity, 1);
   }

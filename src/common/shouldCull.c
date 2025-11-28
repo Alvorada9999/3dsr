@@ -17,16 +17,7 @@
 #include "common.h"
 #include "vector.h"
 
-bool shouldCull(struct entity entity, struct vector3D vertexA, struct vector3D vertexB, struct vector3D vertexC, struct vector3D camera) {
-  vertexA.x += entity.currentXTranslation;
-  vertexA.y += entity.currentYTranslation;
-  vertexA.z += entity.currentZTranslation;
-  vertexB.x += entity.currentXTranslation;
-  vertexB.y += entity.currentYTranslation;
-  vertexB.z += entity.currentZTranslation;
-  vertexC.x += entity.currentXTranslation;
-  vertexC.y += entity.currentYTranslation;
-  vertexC.z += entity.currentZTranslation;
+bool shouldCull(struct vector3D vertexA, struct vector3D vertexB, struct vector3D vertexC, struct vector3D camera) {
   struct vector3D v1, v2, faceNormal, cameraRay;
 
   v1 = subtract3DVectors(vertexB, vertexA);

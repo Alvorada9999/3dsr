@@ -20,11 +20,9 @@
 struct entity getNewEntity(void) {
   struct entity e;
   e.vectors = NULL;
+  e.transformedVectors = NULL;
   e.vectorsLength = 0;
   e.triangles = NULL;
   e.trianglesLength = 0;
-  e.currentXTranslation = 0;
-  e.currentYTranslation = 0;
-  e.currentZTranslation = 0;
   return e;
 }
