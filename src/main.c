@@ -18,13 +18,13 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
 
 #include "common.h"
 #include "entity.h"
 #include "input.h"
 #include "init.h"
 #include "matrices.h"
+#include "vector.h"
 
 struct collorBuffer *collorBuffer;
 
@@ -46,7 +46,9 @@ int32_t main(int32_t argc, char *argv[]) {
   struct programOptions programOptions = getProgramOptions(argc, argv);
   loadEntityFromObjFile(programOptions.objFilePath, &entity);
 
+  struct Matrix4x4 rotationMatrix = get4x4Identity();
   struct Matrix4x4 translationMatrix = get4x4Translation(initialPosition.x, initialPosition.y, initialPosition.z);
+  struct Matrix4x4 worldMatrix = get4x4Identity();
 
   uint64_t lastFrameTime = 0;
   float deltaTimeInSeconds = 0;
@@ -62,11 +64,13 @@ int32_t main(int32_t argc, char *argv[]) {
 
     getInput();
 
-    static struct Matrix4x4 rotationMatrix;
-    rotationMatrix = get4x4Rotation(rotationVectorSpeedInSeconds.x*deltaTimeInSeconds, rotationVectorSpeedInSeconds.y*deltaTimeInSeconds, rotationVectorSpeedInSeconds.z*deltaTimeInSeconds);
+    struct Matrix4x4 r = get4x4Rotation(rotationVectorSpeedInSeconds.x*deltaTimeInSeconds, rotationVectorSpeedInSeconds.y*deltaTimeInSeconds, rotationVectorSpeedInSeconds.z*deltaTimeInSeconds);
+    rotationMatrix = get4x4By4x4Product(&r, &rotationMatrix);
+
+    worldMatrix = get4x4By4x4Product(&translationMatrix, &rotationMatrix);
+
     for(uint32_t i=0; i<entity.vectorsLength; i++) {
-      entity.vectors[i] = get4x4ByVector3DProduct(&rotationMatrix, &entity.vectors[i]);
-      entity.transformedVectors[i] = get4x4ByVector3DProduct(&translationMatrix, &entity.vectors[i]);
+      entity.transformedVectors[i] = get4x4ByVector3DProduct(&worldMatrix, &entity.vectors[i]);
     }
     render(sdl, collorBuffer, &entity, 1);
   }
