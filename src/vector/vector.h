@@ -39,6 +39,7 @@ struct vector3D getCrossProduct(struct vector3D a, struct vector3D b);
 float getDotProduct(struct vector3D a, struct vector3D b);
 
 struct vector3D subtract3DVectors(struct vector3D a, struct vector3D b);
+struct vector3D getNormalizedVector(struct vector3D v);
 
 #endif // !_3DSR_VECTOR
 

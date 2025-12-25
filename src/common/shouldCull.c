@@ -22,7 +22,8 @@ bool shouldCull(struct vector3D vertexA, struct vector3D vertexB, struct vector3
 
   v1 = subtract3DVectors(vertexB, vertexA);
   v2 = subtract3DVectors(vertexC, vertexA);
-  faceNormal = getCrossProduct(v1, v2);
+  faceNormal = getCrossProduct(v2, v1);
+  // faceNormal = getCrossProduct(v1, v2);
 
   //don't matter wich vertex, I just want a vector coming from the camera to the face
   cameraRay = subtract3DVectors(camera, vertexA);

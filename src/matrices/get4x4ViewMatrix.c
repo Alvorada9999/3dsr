@@ -1,5 +1,5 @@
 // This file is part of 3dsr.
-// Copyright (C) 2024 Kenedy Henrique Bueno Silva
+// Copyright (C) 2025 Kenedy Henrique Bueno Silva
 
 // 3dsr is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,17 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <SDL2/SDL_render.h>
+#include "matrices.h"
+#include "vector.h"
 
-#include "common.h"
-#include "entity.h"
+//look at implementation
+struct Matrix4x4 getViewMatrix(struct camera *camera) {
+  struct vector3D z = getNormalizedVector(subtract3DVectors(camera->eye, camera->target));
+  struct vector3D x = getNormalizedVector(getCrossProduct(z, camera->up));
+  struct vector3D y = getCrossProduct(x, z);
 
-void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities) {
-  drawGrid(collorBuffer, 10, 0xFF00B300);
-  for(uint32_t i=0; i<numberOfEntities; i++) {
-    performPerspectiveProjectionOnEntity(entities[i]);
-  }
-  renderCollorBuffer(collorBuffer, sdl->renderer);
-  clearCollorBuffer(collorBuffer, 0x00000009);
-  SDL_RenderPresent(sdl->renderer);
+  struct Matrix4x4 viewMatrix = {{
+    {x.x, x.y, x.z, -getDotProduct(x, camera->eye)},
+    {y.x, y.y, y.z, -getDotProduct(y, camera->eye)},
+    {z.x, z.y, z.z, -getDotProduct(z, camera->eye)},
+    {0, 0, 0, 1}
+  }};
+
+  return viewMatrix;
 }

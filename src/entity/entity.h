@@ -36,7 +36,7 @@ struct entity {
 };
 
 struct entity getNewEntity(void);
-void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor);
+void performPerspectiveProjectionOnEntity(struct entity entity);
 void loadEntityFromObjFile(char *filePath, struct entity *entity);
 void pushVector(struct entity *entity, struct vector3D vector3D);
 void pushTriangle(struct entity *entity, struct triangle triangle);

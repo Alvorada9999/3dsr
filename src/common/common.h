@@ -27,6 +27,7 @@
 #define RENDER_OPTION_ONLY_FACES 3
 #define RENDER_OPTION_WIREFRAME_AND_FACES 4
 
+#include "vector.h"
 struct SDL {
   SDL_Window *window;
   SDL_Renderer *renderer;
@@ -39,6 +40,11 @@ struct collorBuffer {
   SDL_Texture *texture;
   uint16_t width;
   uint16_t height;
+};
+struct camera {
+  struct vector3D eye;
+  struct vector3D target;
+  struct vector3D up;
 };
 #include "entity.h"
 

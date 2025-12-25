@@ -17,6 +17,7 @@
 #ifndef _3DSR_MATRICES
 
 #include "vector.h"
+#include "common.h"
 
 struct Matrix4x4 {
   float m[4][4];
@@ -32,5 +33,8 @@ struct Matrix4x4 get4x4Rotation(float betaX, float betaY, float betaZ);
 struct vector3D get4x4ByVector3DProduct(struct Matrix4x4 *a, struct vector3D *b);
 struct Matrix4x4 get4x4By4x4Product(struct Matrix4x4 *a, struct Matrix4x4 *b);
 struct Matrix4x4 getWorldMatrix(struct Matrix4x4 scaling, struct Matrix4x4 translation, struct Matrix4x4 rotationX, struct Matrix4x4 rotationY, struct Matrix4x4 rotationZ);
+struct Matrix4x4 getViewMatrix(struct camera *camera);
+struct Matrix4x4 getProjectionMatrix(float screenHigh, float screenWidth, float verticalFov);
+void printMatrix4x4(struct Matrix4x4 m);
 
 #endif // !_3DSR_MATRICES

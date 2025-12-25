@@ -31,7 +31,6 @@
 #define PARSING_FACE 2
 
 extern struct vector3D initialPosition;
-extern float fovFactor;
 
 void loadEntityFromObjFile(char *filePath, struct entity *entity) {
   //those are used to store information used to decide
@@ -186,7 +185,6 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
   if(verticalLength > bigger) bigger = verticalLength;
   if(biggestPositveZ > bigger) bigger = biggestPositveZ;
   initialPosition.z = 0 - bigger;
-  fovFactor = bigger;
 
   entity->transformedVectors = malloc(sizeof(struct vector3D)*entity->vectorsLength);
   memset(entity->transformedVectors, 0, sizeof(struct vector3D)*entity->vectorsLength);

@@ -14,17 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <SDL2/SDL_render.h>
+#include "vector.h"
+#include <math.h>
 
-#include "common.h"
-#include "entity.h"
-
-void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities) {
-  drawGrid(collorBuffer, 10, 0xFF00B300);
-  for(uint32_t i=0; i<numberOfEntities; i++) {
-    performPerspectiveProjectionOnEntity(entities[i]);
-  }
-  renderCollorBuffer(collorBuffer, sdl->renderer);
-  clearCollorBuffer(collorBuffer, 0x00000009);
-  SDL_RenderPresent(sdl->renderer);
+struct vector3D getNormalizedVector(struct vector3D v) {
+  float vM = sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2));
+  v.x /= vM;
+  v.y /= vM;
+  v.z /= vM;
+  return v;
 }

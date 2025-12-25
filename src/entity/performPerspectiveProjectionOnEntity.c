@@ -14,10 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include <math.h>
-
 #include "common.h"
 #include "entity.h"
+#include "matrices.h"
 #include "vector.h"
 
 void merge(struct triangle *triangles, uint32_t left, uint32_t mid, uint32_t right) {
@@ -88,11 +87,12 @@ void sortTrianglesByDeep(struct triangle *triangles, uint32_t trianglesLength, s
   mergeSort(triangles, 0, trianglesLength);
 }
 
-uint8_t renderOption = RENDER_OPTION_WIREFRAME_AND_FACES;
+uint8_t renderOption = RENDER_OPTION_ONLY_VECTORS;
 
 extern struct collorBuffer *collorBuffer;
+extern struct SDL *sdl;
 
-void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor) {
+void performPerspectiveProjectionOnEntity(struct entity entity) {
   static struct vector3D vertexA, vertexB, vertexC;
 
   //Painter's algorithm usage, at some point in the future the z buffer solution will be used instead
@@ -103,15 +103,34 @@ void performPerspectiveProjectionOnEntity(struct entity entity, float fovFactor)
     vertexB = entity.transformedVectors[entity.triangles[i].b-1];
     vertexC = entity.transformedVectors[entity.triangles[i].c-1];
 
+    //rudimentary culling
+    if ((vertexA.z < 1 && vertexA.z > -1) || (vertexB.z < 1 && vertexB.z > -1) || (vertexC.z < 1 && vertexC.z > -1)) continue;
+    if (vertexA.z > 0 || vertexB.z > 0 || vertexC.z > 0) continue;
+
     if(shouldCull(vertexA, vertexB, vertexC, (struct vector3D){ .x = 0, .y = 0, .z = 0 })) continue;
-    vertexA.x = round((vertexA.x)/(vertexA.z) * fovFactor);
-    vertexA.y = round((vertexA.y)/(vertexA.z) * fovFactor);
 
-    vertexB.x = round((vertexB.x)/(vertexB.z) * fovFactor);
-    vertexB.y = round((vertexB.y)/(vertexB.z) * fovFactor);
+    struct Matrix4x4 projectionMatrix = getProjectionMatrix(sdl->windowHeight, sdl->windowWidth, 60*(M_PI/180));
+    vertexA = get4x4ByVector3DProduct(&projectionMatrix, &vertexA);
+    vertexA.x /= vertexA.w;
+    vertexA.y /= vertexA.w;
+    vertexA.z /= vertexA.w;
+    vertexB = get4x4ByVector3DProduct(&projectionMatrix, &vertexB);
+    vertexB.x /= vertexB.w;
+    vertexB.y /= vertexB.w;
+    vertexB.z /= vertexB.w;
+    vertexC = get4x4ByVector3DProduct(&projectionMatrix, &vertexC);
+    vertexC.x /= vertexC.w;
+    vertexC.y /= vertexC.w;
+    vertexC.z /= vertexC.w;
 
-    vertexC.x = round((vertexC.x)/(vertexC.z) * fovFactor);
-    vertexC.y = round((vertexC.y)/(vertexC.z) * fovFactor);
+    vertexA.x *= sdl->windowWidth/2.0;
+    vertexA.y *= sdl->windowHeight/2.0;
+
+    vertexB.x *= sdl->windowWidth/2.0;
+    vertexB.y *= sdl->windowHeight/2.0;
+
+    vertexC.x *= sdl->windowWidth/2.0;
+    vertexC.y *= sdl->windowHeight/2.0;
 
     // some addition is being added to the draw position to move the projection to the center of the screen /////////////////
 

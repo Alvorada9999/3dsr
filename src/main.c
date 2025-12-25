@@ -27,17 +27,14 @@
 #include "vector.h"
 
 struct collorBuffer *collorBuffer;
+struct vector3D cameraEye = {0, 0, 0, 1};
+struct Matrix4x4 translationMatrix;
 
-//those values are just for testing purposes
-#define CAMERA_POSITION_X_AXIS 0
-#define CAMERA_POSITION_Z_AXIS 0 
-#define CAMERA_POSITION_Y_AXIS 0
-struct vector3D rotationVectorSpeedInSeconds = { .x = 0.0, .y = 1.5, .z = 0.0 };
 struct vector3D initialPosition = { .x = 0, .y = 0, .z = 0 };
-float fovFactor = 0;
+struct SDL *sdl;
 
 int32_t main(int32_t argc, char *argv[]) {
-  struct SDL *sdl = initSdl();
+  sdl = initSdl();
   collorBuffer = createCollorBuffer(sdl->renderer, sdl->windowWidth, sdl->windowHeight);
 
   bool isRunning = true;
@@ -47,11 +44,16 @@ int32_t main(int32_t argc, char *argv[]) {
   loadEntityFromObjFile(programOptions.objFilePath, &entity);
 
   struct Matrix4x4 rotationMatrix = get4x4Identity();
-  struct Matrix4x4 translationMatrix = get4x4Translation(initialPosition.x, initialPosition.y, initialPosition.z);
+  translationMatrix = get4x4Translation(initialPosition.x, initialPosition.y, initialPosition.z);
   struct Matrix4x4 worldMatrix = get4x4Identity();
 
   uint64_t lastFrameTime = 0;
   float deltaTimeInSeconds = 0;
+  struct camera camera = {
+    .eye = {0, 0, 0, 1},
+    .target = {camera.eye.x, camera.eye.y, camera.eye.z - 200.0, 1},
+    .up = {0, 1, 0, 1}
+  };
   while(isRunning) {
     // Wait some time until reaching the target frame time in milliseconds
     int32_t timeToWait = TARGET_FRAME_TIME - (SDL_GetTicks64() - lastFrameTime);
@@ -64,10 +66,18 @@ int32_t main(int32_t argc, char *argv[]) {
 
     getInput();
 
+    static struct vector3D rotationVectorSpeedInSeconds = { .x = 0.0, .y = 1.5, .z = 0.0 };
     struct Matrix4x4 r = get4x4Rotation(rotationVectorSpeedInSeconds.x*deltaTimeInSeconds, rotationVectorSpeedInSeconds.y*deltaTimeInSeconds, rotationVectorSpeedInSeconds.z*deltaTimeInSeconds);
     rotationMatrix = get4x4By4x4Product(&r, &rotationMatrix);
 
+    worldMatrix = get4x4Identity();
     worldMatrix = get4x4By4x4Product(&translationMatrix, &rotationMatrix);
+
+    //cameraEye is updated by user input
+    camera.eye = cameraEye;
+
+    struct Matrix4x4 viewMatrix = getViewMatrix(&camera);
+    worldMatrix = get4x4By4x4Product(&viewMatrix, &worldMatrix);
 
     for(uint32_t i=0; i<entity.vectorsLength; i++) {
       entity.transformedVectors[i] = get4x4ByVector3DProduct(&worldMatrix, &entity.vectors[i]);

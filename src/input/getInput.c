@@ -17,31 +17,57 @@
 #include <SDL2/SDL_events.h>
 
 #include "common.h"
+#include "matrices.h"
 
 extern uint8_t renderOption;
+extern struct vector3D cameraEye;
+
 void getInput(void) {
   SDL_Event event;
   SDL_PollEvent(&event);
+  float translationSize = 10;
 
   switch (event.type) {
-    case SDL_QUIT:
-      exit(1);
+  case SDL_QUIT:
+    exit(1);
+    break;
+  case SDL_KEYDOWN: {
+    switch (event.key.keysym.sym) {
+    case SDLK_1:
+      renderOption = RENDER_OPTION_ONLY_VECTORS;
       break;
-    case SDL_KEYDOWN:
-      if(event.key.keysym.sym == SDLK_1) {
-        renderOption = RENDER_OPTION_ONLY_VECTORS;
-      }
-      if(event.key.keysym.sym == SDLK_2) {
-        renderOption = RENDER_OPTION_ONLY_WIREFRAME;
-      }
-      if(event.key.keysym.sym == SDLK_3) {
-        renderOption = RENDER_OPTION_ONLY_FACES;
-      }
-      if(event.key.keysym.sym == SDLK_4) {
-        renderOption = RENDER_OPTION_WIREFRAME_AND_FACES;
-      }
+    case SDLK_2:
+      renderOption = RENDER_OPTION_ONLY_WIREFRAME;
       break;
-    default:
+    case SDLK_3:
+      renderOption = RENDER_OPTION_ONLY_FACES;
       break;
+    case SDLK_4:
+      renderOption = RENDER_OPTION_WIREFRAME_AND_FACES;
+      break;
+    case SDLK_w: {
+      struct Matrix4x4 newTranslation = get4x4Translation(0, 0, -translationSize);
+      cameraEye = get4x4ByVector3DProduct(&newTranslation, &cameraEye);
+      break;
+    }
+    case SDLK_s: {
+      struct Matrix4x4 newTranslation = get4x4Translation(0, 0, translationSize);
+      cameraEye = get4x4ByVector3DProduct(&newTranslation, &cameraEye);
+      break;
+    }
+    case SDLK_a: {
+      struct Matrix4x4 newTranslation = get4x4Translation(-translationSize, 0, 0);
+      cameraEye = get4x4ByVector3DProduct(&newTranslation, &cameraEye);
+      break;
+    }
+    case SDLK_d: {
+      struct Matrix4x4 newTranslation = get4x4Translation(translationSize, 0, 0);
+      cameraEye = get4x4ByVector3DProduct(&newTranslation, &cameraEye);
+      break;
+    }
+    }
+  }
+  default:
+    break;
   }
 }
