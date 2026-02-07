@@ -19,9 +19,9 @@
 
 //look at implementation
 struct Matrix4x4 getViewMatrix(struct camera *camera) {
-  struct vector3D z = getNormalizedVector(subtract3DVectors(camera->eye, camera->target));
-  struct vector3D x = getNormalizedVector(getCrossProduct(z, camera->up));
-  struct vector3D y = getCrossProduct(x, z);
+  struct vector3D z = getNormalizedVector(subtract3DVectors(camera->target, camera->eye));
+  struct vector3D x = getNormalizedVector(getCrossProduct(camera->up, z));
+  struct vector3D y = getCrossProduct(z, x);
 
   struct Matrix4x4 viewMatrix = {{
     {x.x, x.y, x.z, -getDotProduct(x, camera->eye)},

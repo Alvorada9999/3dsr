@@ -21,6 +21,7 @@
 
 extern uint8_t renderOption;
 extern struct vector3D cameraEye;
+extern struct vector3D cameraTarget;
 
 void getInput(void) {
   SDL_Event event;
@@ -46,23 +47,27 @@ void getInput(void) {
       renderOption = RENDER_OPTION_WIREFRAME_AND_FACES;
       break;
     case SDLK_w: {
-      struct Matrix4x4 newTranslation = get4x4Translation(0, 0, -translationSize);
+      struct Matrix4x4 newTranslation = get4x4Translation(0, 0, translationSize);
       cameraEye = get4x4ByVector3DProduct(&newTranslation, &cameraEye);
+      cameraTarget = get4x4ByVector3DProduct(&newTranslation, &cameraTarget);
       break;
     }
     case SDLK_s: {
-      struct Matrix4x4 newTranslation = get4x4Translation(0, 0, translationSize);
+      struct Matrix4x4 newTranslation = get4x4Translation(0, 0, -translationSize);
       cameraEye = get4x4ByVector3DProduct(&newTranslation, &cameraEye);
+      cameraTarget = get4x4ByVector3DProduct(&newTranslation, &cameraTarget);
       break;
     }
     case SDLK_a: {
       struct Matrix4x4 newTranslation = get4x4Translation(-translationSize, 0, 0);
       cameraEye = get4x4ByVector3DProduct(&newTranslation, &cameraEye);
+      cameraTarget = get4x4ByVector3DProduct(&newTranslation, &cameraTarget);
       break;
     }
     case SDLK_d: {
       struct Matrix4x4 newTranslation = get4x4Translation(translationSize, 0, 0);
       cameraEye = get4x4ByVector3DProduct(&newTranslation, &cameraEye);
+      cameraTarget = get4x4ByVector3DProduct(&newTranslation, &cameraTarget);
       break;
     }
     }

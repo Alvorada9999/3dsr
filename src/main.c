@@ -28,6 +28,7 @@
 
 struct collorBuffer *collorBuffer;
 struct vector3D cameraEye = {0, 0, 0, 1};
+struct vector3D cameraTarget = {0, 0, -1, 1};
 struct Matrix4x4 translationMatrix;
 
 struct vector3D initialPosition = { .x = 0, .y = 0, .z = 0 };
@@ -50,8 +51,8 @@ int32_t main(int32_t argc, char *argv[]) {
   uint64_t lastFrameTime = 0;
   float deltaTimeInSeconds = 0;
   struct camera camera = {
-    .eye = {0, 0, 0, 1},
-    .target = {camera.eye.x, camera.eye.y, camera.eye.z - 200.0, 1},
+    .eye = cameraEye,
+    .target = cameraTarget,
     .up = {0, 1, 0, 1}
   };
   while(isRunning) {
@@ -75,6 +76,7 @@ int32_t main(int32_t argc, char *argv[]) {
 
     //cameraEye is updated by user input
     camera.eye = cameraEye;
+    camera.target = cameraTarget;
 
     struct Matrix4x4 viewMatrix = getViewMatrix(&camera);
     worldMatrix = get4x4By4x4Product(&viewMatrix, &worldMatrix);

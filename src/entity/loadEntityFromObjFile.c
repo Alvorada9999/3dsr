@@ -184,7 +184,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
   if(horizontalLength > bigger) bigger = horizontalLength;
   if(verticalLength > bigger) bigger = verticalLength;
   if(biggestPositveZ > bigger) bigger = biggestPositveZ;
-  initialPosition.z = 0 - bigger;
+  initialPosition.z = 0 + bigger;
 
   entity->transformedVectors = malloc(sizeof(struct vector3D)*entity->vectorsLength);
   memset(entity->transformedVectors, 0, sizeof(struct vector3D)*entity->vectorsLength);

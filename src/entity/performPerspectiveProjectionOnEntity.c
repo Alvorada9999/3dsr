@@ -103,7 +103,7 @@ void performPerspectiveProjectionOnEntity(struct entity entity) {
     vertexB = entity.transformedVectors[entity.triangles[i].b-1];
     vertexC = entity.transformedVectors[entity.triangles[i].c-1];
 
-    //rudimentary culling
+    //rudimentary clipping
     if ((vertexA.z < 1 && vertexA.z > -1) || (vertexB.z < 1 && vertexB.z > -1) || (vertexC.z < 1 && vertexC.z > -1)) continue;
     if (vertexA.z > 0 || vertexB.z > 0 || vertexC.z > 0) continue;
 
