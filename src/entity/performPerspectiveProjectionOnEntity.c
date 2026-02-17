@@ -18,6 +18,7 @@
 #include "entity.h"
 #include "matrices.h"
 #include "vector.h"
+#include <stdint.h>
 
 void merge(struct triangle *triangles, uint32_t left, uint32_t mid, uint32_t right) {
   uint32_t i, j, k;
@@ -107,7 +108,12 @@ void performPerspectiveProjectionOnEntity(struct entity entity) {
     if ((vertexA.z < 1 && vertexA.z > -1) || (vertexB.z < 1 && vertexB.z > -1) || (vertexC.z < 1 && vertexC.z > -1)) continue;
     if (vertexA.z > 0 || vertexB.z > 0 || vertexC.z > 0) continue;
 
-    if(shouldCull(vertexA, vertexB, vertexC, (struct vector3D){ .x = 0, .y = 0, .z = 0 })) continue;
+    static struct vector3D faceNormal = {0, 0,0, 0};
+    if(shouldCull(vertexA, vertexB, vertexC, (struct vector3D){ .x = 0, .y = 0, .z = 0 }, &faceNormal)) continue;
+
+    uint32_t argbColor = 0xFFFCFF75;
+    float factor = getDotProduct(faceNormal, getNormalizedVector((struct vector3D){1, 1, 1, 1}));
+    argbColor = applyLightIntensistyOnArgb(argbColor, factor);
 
     struct Matrix4x4 projectionMatrix = getProjectionMatrix(sdl->windowHeight, sdl->windowWidth, 60*(M_PI/180));
     vertexA = get4x4ByVector3DProduct(&projectionMatrix, &vertexA);
@@ -142,7 +148,7 @@ void performPerspectiveProjectionOnEntity(struct entity entity) {
     }
 
     if(renderOption == RENDER_OPTION_ONLY_FACES || renderOption == RENDER_OPTION_WIREFRAME_AND_FACES) {
-      fillTriangle(vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, 0xFFFCFF75);
+      fillTriangle(vertexA.x+collorBuffer->width/2.0, vertexA.y+collorBuffer->height/2.0, vertexB.x+collorBuffer->width/2.0, vertexB.y+collorBuffer->height/2.0, vertexC.x+collorBuffer->width/2.0, vertexC.y+collorBuffer->height/2.0, argbColor);
     }
 
     if(renderOption == RENDER_OPTION_ONLY_WIREFRAME || renderOption == RENDER_OPTION_WIREFRAME_AND_FACES) {

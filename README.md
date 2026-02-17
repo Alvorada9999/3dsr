@@ -2,7 +2,15 @@
 # A 3D [Software Renderer](https://en.wikipedia.org/wiki/Software_rendering)
 <img src='./preview.gif'>
 
-###### Rendered and recorded on a Thinkpad T400 (2 core no hyperthreading cpu)
+### Features/standards so far
+- Column major
+- DDA line drawing
+- Back-face culling
+- Triangle filling
+- Painter's algorithm for handling deep (No z-buffer yet, that's why some triangles filling looks strange)
+- Left handed
+- Direct3D projection matrix
+- "Global" lighting flat shading
 
 ### Dependencies
 

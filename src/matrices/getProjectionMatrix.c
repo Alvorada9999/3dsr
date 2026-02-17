@@ -19,7 +19,7 @@
 #include <stdint.h>
 
 struct Matrix4x4 getProjectionMatrix(float screenHigh, float screenWidth, float verticalFov) {
-  float zfar = 200.0f, znear = 1.0f;
+  float zfar = 100.0f, znear = 10.0f;
   struct Matrix4x4 projectionMatrix = get4x4Identity();
   projectionMatrix.m[3][3] = 0.0f;
 
@@ -32,9 +32,9 @@ struct Matrix4x4 getProjectionMatrix(float screenHigh, float screenWidth, float 
   projectionMatrix.m[1][1] = fov;
 
   // z scaling
-  // float lambda = zfar / (zfar - znear);
   projectionMatrix.m[2][2] = zfar/(zfar-znear);
-  projectionMatrix.m[2][3] = ((zfar/(zfar-znear))*znear);
+  // projectionMatrix.m[2][3] = -((zfar/(zfar-znear))*znear);
+  projectionMatrix.m[2][3] = -znear*zfar/(zfar-znear);
 
   projectionMatrix.m[3][2] = 1.0f;
 

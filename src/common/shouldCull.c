@@ -17,17 +17,17 @@
 #include "common.h"
 #include "vector.h"
 
-bool shouldCull(struct vector3D vertexA, struct vector3D vertexB, struct vector3D vertexC, struct vector3D camera) {
-  struct vector3D v1, v2, faceNormal, cameraRay;
+bool shouldCull(struct vector3D vertexA, struct vector3D vertexB, struct vector3D vertexC, struct vector3D camera, struct vector3D *faceNormal) {
+  struct vector3D v1, v2, cameraRay;
 
   v1 = subtract3DVectors(vertexB, vertexA);
   v2 = subtract3DVectors(vertexC, vertexA);
-  faceNormal = getCrossProduct(v1, v2);
+  *faceNormal = getNormalizedVector(getCrossProduct(v1, v2));
 
   //don't matter wich vertex, I just want a vector coming from the camera to the face
   cameraRay = subtract3DVectors(camera, vertexA);
 
-  if(getDotProduct(faceNormal, cameraRay) <= 0) {
+  if(getDotProduct(*faceNormal, cameraRay) <= 0) {
     return true;
   } else return false;
 }
