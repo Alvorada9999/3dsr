@@ -26,12 +26,17 @@
 #include "error.h"
 #include "vector.h"
 
-#define LOOKING_FOR_FACES_AND_VERTICES 0
+#define LOOKING_FOR_FACES_AND_VERTICES_AND_TEXTURE_COORDINATES 0
 #define PARSING_VERTEX 1
 #define PARSING_FACE 2
+#define PARSING_TEXTURE_COORDINATES 3
+#define A_UV 4
+#define B_UV 5 
+#define C_UV 6 
 
 extern struct vector3D initialPosition;
 
+//I know there are many improvements for this function, it's not being very efficient as is
 void loadEntityFromObjFile(char *filePath, struct entity *entity) {
   //those are used to store information used to decide
   //the initial position for the entity model
@@ -39,7 +44,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
   float biggestPositveX = 0, biggestPositveY = 0, biggestPositveZ = 0;
   float smallestNegativeX = 0, smallestNegativeY = 0;
 
-  uint8_t currentTask = LOOKING_FOR_FACES_AND_VERTICES;
+  uint8_t currentTask = LOOKING_FOR_FACES_AND_VERTICES_AND_TEXTURE_COORDINATES;
   int8_t fd = open(filePath, O_RDONLY);
   if(fd == -1) errExit(9);
 
@@ -51,9 +56,10 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
     if(readSize == 0) break;
     for(int16_t i=0; i<readSize; i++) {
       switch (currentTask) {
-        case LOOKING_FOR_FACES_AND_VERTICES:
+        case LOOKING_FOR_FACES_AND_VERTICES_AND_TEXTURE_COORDINATES:
           if(lastChar == 'v' && buffer[i] == ' ') { currentTask = PARSING_VERTEX; break; }
           if(lastChar == 'f' && buffer[i] == ' ') { currentTask = PARSING_FACE; break; }
+          if(lastChar == 'v' && buffer[i] == 't') { currentTask = PARSING_TEXTURE_COORDINATES; break; }
           break;
         case PARSING_VERTEX: {
           static uint8_t currentVertexToGet = 'x';
@@ -90,7 +96,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
                 currentVertexToGet = 'x';
                 currentAxisLenght = 0;
                 memset(currentAxisValue, 0, 10);
-                currentTask = LOOKING_FOR_FACES_AND_VERTICES;
+                currentTask = LOOKING_FOR_FACES_AND_VERTICES_AND_TEXTURE_COORDINATES;
                 pushVector(entity, vertex);
 
                 if(vertex.x > biggestPositveX) biggestPositveX = vertex.x;
@@ -108,8 +114,8 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
           break;
         }
         case PARSING_FACE: {
-          static struct triangle triangle = { 0, 0, 0, 0 };
-          static uint8_t currentVertexIndexToGet = 'a';
+          static struct triangle triangle = { 0, 0, 0, 0, 0, 0, 0 };
+          static uint8_t currentIndexToGet = 'a';
           static uint8_t faceBuffer[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, faceBufferLength = 0;
           static bool ignoreUntilSpace = false;
           if(ignoreUntilSpace) {
@@ -117,11 +123,26 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
             break;
           }
 
-          switch (currentVertexIndexToGet) {
+          switch (currentIndexToGet) {
             case 'a':
               if(buffer[i] < 48 || buffer[i] > 57) {
                 triangle.a = strtoul((char *)faceBuffer, NULL, 10);
-                currentVertexIndexToGet = 'b';
+                faceBufferLength = 0;
+                memset(faceBuffer, 0, 10);
+                if(buffer[i] == '/') currentIndexToGet = A_UV;
+                else {
+                  currentIndexToGet = 'b';
+                  ignoreUntilSpace = true;
+                }
+                break;
+              }
+              faceBuffer[faceBufferLength] = buffer[i];
+              faceBufferLength ++;
+              break;
+            case A_UV:
+              if(buffer[i] < 48 || buffer[i] > 57) {
+                triangle.a_uv = strtoul((char *)faceBuffer, NULL, 10);
+                currentIndexToGet = 'b';
                 faceBufferLength = 0;
                 memset(faceBuffer, 0, 10);
                 if(buffer[i] != ' ') ignoreUntilSpace = true;
@@ -133,7 +154,22 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
             case 'b':
               if(buffer[i] < 48 || buffer[i] > 57) {
                 triangle.b = strtoul((char *)faceBuffer, NULL, 10);
-                currentVertexIndexToGet = 'c';
+                faceBufferLength = 0;
+                memset(faceBuffer, 0, 10);
+                if(buffer[i] == '/') currentIndexToGet = B_UV;
+                else {
+                  currentIndexToGet = 'c';
+                  ignoreUntilSpace = true;
+                }
+                break;
+              }
+              faceBuffer[faceBufferLength] = buffer[i];
+              faceBufferLength ++;
+              break;
+            case B_UV:
+              if(buffer[i] < 48 || buffer[i] > 57) {
+                triangle.b_uv = strtoul((char *)faceBuffer, NULL, 10);
+                currentIndexToGet = 'c';
                 faceBufferLength = 0;
                 memset(faceBuffer, 0, 10);
                 if(buffer[i] != ' ') ignoreUntilSpace = true;
@@ -145,11 +181,30 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
             case 'c':
               if(buffer[i] < 48 || buffer[i] > 57) {
                 triangle.c = strtoul((char *)faceBuffer, NULL, 10);
-                currentVertexIndexToGet = 'a';
                 faceBufferLength = 0;
                 memset(faceBuffer, 0, 10);
-                currentTask = LOOKING_FOR_FACES_AND_VERTICES;
+                if(buffer[i] == '/') currentIndexToGet = C_UV;
+                else {
+                  currentIndexToGet = 'a';
+                  currentTask = LOOKING_FOR_FACES_AND_VERTICES_AND_TEXTURE_COORDINATES;
+                  pushTriangle(entity,  triangle);
+                }
+                break;
+              }
+              faceBuffer[faceBufferLength] = buffer[i];
+              faceBufferLength ++;
+              break;
+            case C_UV:
+              if(buffer[i] < 48 || buffer[i] > 57) {
+                triangle.c_uv = strtoul((char *)faceBuffer, NULL, 10);
+                currentIndexToGet = 'a';
+                faceBufferLength = 0;
+                memset(faceBuffer, 0, 10);
+                currentTask = LOOKING_FOR_FACES_AND_VERTICES_AND_TEXTURE_COORDINATES;
                 pushTriangle(entity,  triangle);
+                triangle.a_uv = 0;
+                triangle.b_uv = 0;
+                triangle.c_uv = 0;
                 break;
               }
               faceBuffer[faceBufferLength] = buffer[i];
@@ -157,6 +212,47 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
               break;
           }
 
+          break;
+        }
+        case PARSING_TEXTURE_COORDINATES: {
+          static uint8_t currentTextureCoordinateToGet = 'u';
+          static uint8_t textureUvBuffer[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+          static uint8_t currentTextureUvLenght = 0;
+          static struct vectorTextures vT = { 0, 0};
+          static bool startedNow = true;
+          //in order to skip the first ' ' (space)
+          if(startedNow) {
+            startedNow = false;
+            break;
+          }
+
+          switch (currentTextureCoordinateToGet) {
+            case 'u':
+              if((buffer[i] < 48 || buffer[i] > 57) && buffer[i] != '.') {
+                vT.u = strtof((char *)textureUvBuffer, NULL);
+                currentTextureCoordinateToGet = 'v';
+                currentTextureUvLenght = 0;
+                memset(textureUvBuffer, 0, 10);
+                break;
+              }
+              textureUvBuffer[currentTextureUvLenght] = buffer[i];
+              currentTextureUvLenght++;
+              break;
+            case 'v':
+              if((buffer[i] < 48 || buffer[i] > 57) && buffer[i] != '.') {
+                vT.v = strtof((char *)textureUvBuffer, NULL);
+                currentTextureCoordinateToGet = 'u';
+                currentTextureUvLenght = 0;
+                memset(textureUvBuffer, 0, 10);
+                currentTask = LOOKING_FOR_FACES_AND_VERTICES_AND_TEXTURE_COORDINATES;
+                startedNow = true;
+                pushVectorTexture(entity, vT);
+                break;
+              }
+              textureUvBuffer[currentTextureUvLenght] = buffer[i];
+              currentTextureUvLenght++;
+              break;
+          }
           break;
         }
       }

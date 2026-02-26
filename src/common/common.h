@@ -20,7 +20,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define TARGET_FPS 60
+#define TARGET_FPS 144
 #define TARGET_FRAME_TIME 1000/TARGET_FPS
 #define RENDER_OPTION_ONLY_VECTORS 1
 #define RENDER_OPTION_ONLY_WIREFRAME 2
@@ -35,9 +35,9 @@ struct SDL {
   uint16_t windowHeight;
 };
 struct collorBuffer {
+  SDL_Texture *texture;
   uint32_t *buffer;
   uint32_t size;
-  SDL_Texture *texture;
   uint16_t width;
   uint16_t height;
 };

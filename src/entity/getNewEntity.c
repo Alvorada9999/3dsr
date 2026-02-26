@@ -24,5 +24,7 @@ struct entity getNewEntity(void) {
   e.vectorsLength = 0;
   e.triangles = NULL;
   e.trianglesLength = 0;
+  e.vectorTextures = NULL;
+  e.vectorsTextureLength = 0;
   return e;
 }
