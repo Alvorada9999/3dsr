@@ -15,6 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <fcntl.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -38,6 +39,12 @@ extern struct vector3D initialPosition;
 
 //I know there are many improvements for this function, it's not being very efficient as is
 void loadEntityFromObjFile(char *filePath, struct entity *entity) {
+  //
+  struct textureUvHolder *texture_uv_holder = malloc(sizeof(struct textureUvHolder));
+  uint32_t texture_uv_holder_lenght = 1;
+  struct vectorTextureUvCoordinates *uvArray = NULL;
+  uint32_t uvArrayLenght = 0;
+
   //those are used to store information used to decide
   //the initial position for the entity model
   float verticalLength = 0, horizontalLength = 0;
@@ -65,7 +72,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
           static uint8_t currentVertexToGet = 'x';
           static uint8_t currentAxisValue[10]  = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
           static uint8_t currentAxisLenght = 0;
-          static struct vector3D vertex;
+          static struct vector3D vertex = {0};
           vertex.w = 1.0f;
           switch (currentVertexToGet) {
             case 'x':
@@ -114,7 +121,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
           break;
         }
         case PARSING_FACE: {
-          static struct triangle triangle = { 0, 0, 0, 0, 0, 0, 0 };
+          static struct triangle triangle = { {0, 0}, {0, 0}, {0, 0}, 0, 0, 0, 0 };
           static uint8_t currentIndexToGet = 'a';
           static uint8_t faceBuffer[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, faceBufferLength = 0;
           static bool ignoreUntilSpace = false;
@@ -141,7 +148,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
               break;
             case A_UV:
               if(buffer[i] < 48 || buffer[i] > 57) {
-                triangle.a_uv = strtoul((char *)faceBuffer, NULL, 10);
+                texture_uv_holder[texture_uv_holder_lenght-1].a_uvIndex = strtoul((char *)faceBuffer, NULL, 10);
                 currentIndexToGet = 'b';
                 faceBufferLength = 0;
                 memset(faceBuffer, 0, 10);
@@ -168,7 +175,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
               break;
             case B_UV:
               if(buffer[i] < 48 || buffer[i] > 57) {
-                triangle.b_uv = strtoul((char *)faceBuffer, NULL, 10);
+                texture_uv_holder[texture_uv_holder_lenght-1].b_uvIndex = strtoul((char *)faceBuffer, NULL, 10);
                 currentIndexToGet = 'c';
                 faceBufferLength = 0;
                 memset(faceBuffer, 0, 10);
@@ -196,15 +203,15 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
               break;
             case C_UV:
               if(buffer[i] < 48 || buffer[i] > 57) {
-                triangle.c_uv = strtoul((char *)faceBuffer, NULL, 10);
+                texture_uv_holder[texture_uv_holder_lenght-1].c_uvIndex = strtoul((char *)faceBuffer, NULL, 10);
+                texture_uv_holder[texture_uv_holder_lenght-1].triangleIndex = entity->trianglesLength+1;
                 currentIndexToGet = 'a';
                 faceBufferLength = 0;
                 memset(faceBuffer, 0, 10);
                 currentTask = LOOKING_FOR_FACES_AND_VERTICES_AND_TEXTURE_COORDINATES;
                 pushTriangle(entity,  triangle);
-                triangle.a_uv = 0;
-                triangle.b_uv = 0;
-                triangle.c_uv = 0;
+                texture_uv_holder = realloc(texture_uv_holder, sizeof(struct textureUvHolder)+texture_uv_holder_lenght*sizeof(struct textureUvHolder));
+                texture_uv_holder_lenght++;
                 break;
               }
               faceBuffer[faceBufferLength] = buffer[i];
@@ -218,7 +225,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
           static uint8_t currentTextureCoordinateToGet = 'u';
           static uint8_t textureUvBuffer[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
           static uint8_t currentTextureUvLenght = 0;
-          static struct vectorTextures vT = { 0, 0};
+          static struct vectorTextureUvCoordinates vT = { 0, 0};
           static bool startedNow = true;
           //in order to skip the first ' ' (space)
           if(startedNow) {
@@ -246,7 +253,7 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
                 memset(textureUvBuffer, 0, 10);
                 currentTask = LOOKING_FOR_FACES_AND_VERTICES_AND_TEXTURE_COORDINATES;
                 startedNow = true;
-                pushVectorTexture(entity, vT);
+                uvArray = addNewUV(&uvArrayLenght, uvArray, vT);
                 break;
               }
               textureUvBuffer[currentTextureUvLenght] = buffer[i];
@@ -259,6 +266,15 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
       lastChar = buffer[i];
     }
   }
+
+  for (uint32_t i=0; i<texture_uv_holder_lenght; i++) {
+    entity->triangles[texture_uv_holder[i].triangleIndex].a_uv = uvArray[texture_uv_holder[i].a_uvIndex];
+    entity->triangles[texture_uv_holder[i].triangleIndex].b_uv = uvArray[texture_uv_holder[i].b_uvIndex];
+    entity->triangles[texture_uv_holder[i].triangleIndex].c_uv = uvArray[texture_uv_holder[i].c_uvIndex];
+  }
+
+  free(uvArray);
+  free(texture_uv_holder);
 
   horizontalLength = fabs(smallestNegativeX) + biggestPositveX;
   verticalLength = fabs(smallestNegativeY) + biggestPositveY;

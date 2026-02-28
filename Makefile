@@ -4,7 +4,7 @@ build:
 	mkdir build
 	find . -type f -name \*.h -exec cp \{\} ./build/ \;
 	find . -type f -name \*.c -exec cp \{\} ./build/ \;
-	gcc -O3 -pedantic-errors -Wall -Wextra -Wsign-conversion -Ibuild -std=gnu17 ./build/*.c -o 3dsr -lm -lSDL2
+	gcc -O3 -ffast-math -march=native -funroll-loops -floop-interchange -flto -pedantic-errors -Wall -Wextra -Wsign-conversion -Ibuild -std=gnu17 ./build/*.c -o 3dsr -lm -lSDL2
 debug:
 	-rm -R build
 	mkdir build

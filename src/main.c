@@ -38,8 +38,6 @@ int32_t main(int32_t argc, char *argv[]) {
   sdl = initSdl();
   collorBuffer = createCollorBuffer(sdl->renderer, sdl->windowWidth, sdl->windowHeight);
 
-  bool isRunning = true;
-  
   struct entity entity = getNewEntity();
   struct programOptions programOptions = getProgramOptions(argc, argv);
   loadEntityFromObjFile(programOptions.objFilePath, &entity);
@@ -55,7 +53,7 @@ int32_t main(int32_t argc, char *argv[]) {
     .target = cameraTarget,
     .up = {0, 1, 0, 1}
   };
-  while(isRunning) {
+  while(true) {
     // Wait some time until reaching the target frame time in milliseconds
     int32_t timeToWait = TARGET_FRAME_TIME - (SDL_GetTicks64() - lastFrameTime);
     // Only delay execution if we are running too fast
