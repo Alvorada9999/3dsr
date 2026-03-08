@@ -15,8 +15,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_image.h>
 
-#include <stdbool.h>
 #include <stdint.h>
 
 #include "common.h"
@@ -35,6 +35,7 @@ struct vector3D initialPosition = { .x = 0, .y = 0, .z = 0 };
 struct SDL *sdl;
 
 int32_t main(int32_t argc, char *argv[]) {
+  if(IMG_Init(IMG_INIT_PNG) == 0) return 0;
   sdl = initSdl();
   collorBuffer = createCollorBuffer(sdl->renderer, sdl->windowWidth, sdl->windowHeight);
 
@@ -53,7 +54,7 @@ int32_t main(int32_t argc, char *argv[]) {
     .target = cameraTarget,
     .up = {0, 1, 0, 1}
   };
-  while(true) {
+  for(;;) {
     // Wait some time until reaching the target frame time in milliseconds
     int32_t timeToWait = TARGET_FRAME_TIME - (SDL_GetTicks64() - lastFrameTime);
     // Only delay execution if we are running too fast

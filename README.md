@@ -4,6 +4,7 @@
 
 ### Features/standards so far
 - Column major
+- Translation, sacaling and roration transforms
 - DDA line drawing
 - Back-face culling
 - Triangle filling
@@ -12,21 +13,22 @@
 - Direct3D projection matrix
 - "Global" lighting flat shading
 
-### Dependencies
+### Build dependencies
 
-- [SDL2](http://libsdl.org) to make a [raster](https://en.wikipedia.org/wiki/Raster_graphics)
+- [SDL2](http://libsdl.org) in order to create a window and draw pixels to to it (simply put, a [raster](https://en.wikipedia.org/wiki/Raster_graphics))
+- [SDL2_image](https://wiki.libsdl.org/SDL2_image/FrontPage) in order to load image files
 - gcc
 - make
 
 #### Debian
 
 ```bash
-  sudo apt install libsdl2-2.0-0 libsdl2-dev
+  sudo apt install libsdl2-dev libsdl2-image-dev
 ```
 
 #### Fedora
 ```bash
-  sudo dnf install SDL2 SDL2-devel
+  sudo dnf install SDL2-devel SDL2_image-devel
 ```
 ### Compiling
 

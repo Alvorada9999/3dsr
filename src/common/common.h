@@ -46,6 +46,11 @@ struct camera {
   struct vector3D target;
   struct vector3D up;
 };
+struct argb8888Buffer {
+  uint16_t width;
+  uint16_t height;
+  uint32_t *pixelArray;
+};
 #include "entity.h"
 
 struct SDL *initSdl(void);
@@ -58,6 +63,7 @@ void drawPixel(struct collorBuffer *collorBuffer, int16_t x, int16_t y, uint32_t
 void drawLineDDA(struct collorBuffer *collorBuffer, int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint32_t argb);
 
 void render(struct SDL *sdl, struct collorBuffer *collorBuffer, struct entity *entities, uint32_t numberOfEntities);
+struct argb8888Buffer loadImageToArgb8888(const char *filename);
 
 bool shouldCull(struct vector3D vertexA, struct vector3D vertexB, struct vector3D vertexC, struct vector3D camera, struct vector3D *faceNormal);
 

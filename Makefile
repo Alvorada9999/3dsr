@@ -4,7 +4,7 @@ build:
 	mkdir build
 	find . -type f -name \*.h -exec cp \{\} ./build/ \;
 	find . -type f -name \*.c -exec cp \{\} ./build/ \;
-	gcc -O3 -ffast-math -march=native -funroll-loops -floop-interchange -flto -pedantic-errors -Wall -Wextra -Wsign-conversion -Ibuild -std=gnu17 ./build/*.c -o 3dsr -lm -lSDL2
+	gcc -O3 -ffast-math -march=native -funroll-loops -floop-interchange -flto -pedantic-errors -Wall -Wextra -Wsign-conversion -Ibuild -std=gnu17 ./build/*.c -o 3dsr -lm -lSDL2 -lSDL2_image
 debug:
 	-rm -R build
 	mkdir build
@@ -18,6 +18,6 @@ debug:
 		./src/vector/*.c \
 		./src/entity/*.c \
 		./src/init/*.c \
-		./src/matrices/*.c -lSDL2 -lm
+		./src/matrices/*.c -lSDL2 -lm -lSDL2_image
 test:
 	make && ./3dsr --obj ./assets/final_v01.obj
