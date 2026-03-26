@@ -35,8 +35,6 @@ struct textureUvHolder {
 //
 
 struct triangle {
-
-  //each value is used to acess an index from an array of vectorTextures
   struct vectorTextureUvCoordinates a_uv;
   struct vectorTextureUvCoordinates b_uv;
   struct vectorTextureUvCoordinates c_uv;

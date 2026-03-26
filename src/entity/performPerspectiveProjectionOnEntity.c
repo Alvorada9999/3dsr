@@ -19,6 +19,8 @@
 #include "matrices.h"
 #include "vector.h"
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 void merge(struct triangle *triangles, uint32_t left, uint32_t mid, uint32_t right) {
   uint32_t i, j, k;
@@ -26,7 +28,12 @@ void merge(struct triangle *triangles, uint32_t left, uint32_t mid, uint32_t rig
   uint32_t n2 = right - mid;
 
   // Create temporary arrays
-  struct triangle leftArr[n1], rightArr[n2];
+  // struct triangle leftArr[n1], rightArr[n2];
+  struct triangle *leftArr=NULL, *rightArr=NULL;
+  leftArr = malloc(sizeof(struct triangle)*n1);
+  memset(leftArr, 0, sizeof(struct triangle)*n1);
+  rightArr = malloc(sizeof(struct triangle)*n2);
+  memset(rightArr, 0, sizeof(struct triangle)*n2);
 
   // Copy data to temporary arrays
   for (i = 0; i < n1; i++)
@@ -56,6 +63,7 @@ void merge(struct triangle *triangles, uint32_t left, uint32_t mid, uint32_t rig
     i++;
     k++;
   }
+  free(leftArr);
 
   // Copy the remaining elements of rightArr[], if any
   while (j < n2) {
@@ -63,6 +71,7 @@ void merge(struct triangle *triangles, uint32_t left, uint32_t mid, uint32_t rig
     j++;
     k++;
   }
+  free(rightArr);
 }
 
 // The subarray to be sorted is in the index range [left-right]

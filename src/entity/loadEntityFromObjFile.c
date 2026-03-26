@@ -56,9 +56,9 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
   if(fd == -1) errExit(9);
 
   int16_t readSize = -1;
-  uint8_t buffer[BUFSIZ], lastChar;
+  uint8_t buffer[BUFSIZ], lastChar = '\n';
   while(readSize != 0) {
-    readSize = read(fd, buffer, 1024);
+    readSize = read(fd, buffer, BUFSIZ);
     if(readSize == -1) continue;
     if(readSize == 0) break;
     for(int16_t i=0; i<readSize; i++) {
@@ -267,8 +267,9 @@ void loadEntityFromObjFile(char *filePath, struct entity *entity) {
     }
   }
 
-  for (uint32_t i=0; i<texture_uv_holder_lenght; i++) {
-    entity->triangles[texture_uv_holder[i].triangleIndex].a_uv = uvArray[texture_uv_holder[i].a_uvIndex];
+  //it ends at texture_uv_holder_lenght-1 because 
+  //there's always an empty position at the end
+  for (uint32_t i=0; i<texture_uv_holder_lenght-1; i++) {
     entity->triangles[texture_uv_holder[i].triangleIndex].b_uv = uvArray[texture_uv_holder[i].b_uvIndex];
     entity->triangles[texture_uv_holder[i].triangleIndex].c_uv = uvArray[texture_uv_holder[i].c_uvIndex];
   }

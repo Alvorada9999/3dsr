@@ -1,16 +1,16 @@
+CC=gcc
+INFO_FLAGS=
+OPTIMIZATION_FLAGS=-O3 -ffast-math -march=native -funroll-loops -floop-interchange -flto
+PATTERN_FLAGS=-pedantic-errors -Wall -Wextra -Wsign-conversion -std=gnu17
 .PHONY: build
 build:
-	-rm -R build
-	mkdir build
-	find . -type f -name \*.h -exec cp \{\} ./build/ \;
-	find . -type f -name \*.c -exec cp \{\} ./build/ \;
-	gcc -O3 -ffast-math -march=native -funroll-loops -floop-interchange -flto -pedantic-errors -Wall -Wextra -Wsign-conversion -Ibuild -std=gnu17 ./build/*.c -o 3dsr -lm -lSDL2 -lSDL2_image
+	make setup
+	$(CC) $(CC_FLAGS) $(PATTERN_FLAGS) $$(sdl2-config --cflags) -Ibuild \
+	./build/*.c -o ./build/3dsr -lm $$(sdl2-config --libs) -lSDL2_image
 debug:
-	-rm -R build
-	mkdir build
-	find . -type f -name \*.h -exec cp \{\} ./build/ \;
-	find . -type f -name \*.c -exec cp \{\} ./build/ \;
-	gcc -pedantic-errors -Wall -Wextra -Wsign-conversion -Ibuild -std=gnu17 -g3 -o 3dsr ./src/*.c \
+	make setup
+	$(CC) $(PATTERN_FLAGS) -Ibuild -g3 \
+		$$(sdl2-config --cflags) -o ./build/3dsr ./src/*.c \
 		./src/common/*.c \
 		./src/utils/error/*.c \
 		./src/utils/*.c \
@@ -18,6 +18,13 @@ debug:
 		./src/vector/*.c \
 		./src/entity/*.c \
 		./src/init/*.c \
-		./src/matrices/*.c -lSDL2 -lm -lSDL2_image
-test:
-	make && ./3dsr --obj ./assets/final_v01.obj
+		./src/matrices/*.c -lm $$(sdl2-config --libs) -lSDL2_image
+run:
+	./build/3dsr --obj ./assets/final_v01.obj
+setup:
+	-rm -R build
+	mkdir build
+	find . -type f -name \*.h -exec cp \{\} ./build/ \;
+	find . -type f -name \*.c -exec cp \{\} ./build/ \;
+clean:
+	rm -R ./build

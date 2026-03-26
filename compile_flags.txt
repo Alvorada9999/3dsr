@@ -10,7 +10,4 @@
 -Isrc/vector
 -Isrc/init
 -Isrc/matrices
--lSDL2
--lm
 -std=gnu17
--lSDL2_image

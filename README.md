@@ -15,30 +15,44 @@
 
 ### Build dependencies
 
-- [SDL2](http://libsdl.org) in order to create a window and draw pixels to to it (simply put, a [raster](https://en.wikipedia.org/wiki/Raster_graphics))
+- [SDL2](http://libsdl.org) in order to create a window and draw pixels to it (simply put, a [raster](https://en.wikipedia.org/wiki/Raster_graphics))
 - [SDL2_image](https://wiki.libsdl.org/SDL2_image/FrontPage) in order to load image files
 - gcc
 - make
 
-#### Debian
-
+##### Debian
 ```bash
   sudo apt install libsdl2-dev libsdl2-image-dev
 ```
 
-#### Fedora
+##### Fedora
 ```bash
   sudo dnf install SDL2-devel SDL2_image-devel
 ```
-### Compiling
 
+##### Windows 10+ (Under the MSYS2 UCRT64 environment)
+```bash
+pacman -S mingw-w64-ucrt-x86_64-SDL2 mingw-w64-ucrt-x86_64-SDL2_image
+```
+
+### Compiling for linux
 ```bash
 make
 ```
-### Testing
-
+### Compiling for windows (Under the MSYS2 UCRT64 environment)
 ```bash
-make test
+make
+./copy_windows_dlls.sh
+```
+
+### Running
+```bash
+make run
+```
+
+### Running (Under default windows environment PowerShell)
+```powershell
+./build/3dsr.exe --obj assets/final_v01.obj
 ```
 
 ### Assets
